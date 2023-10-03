@@ -15,16 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController{
 
     private final UserProfileService userProfileService;
-    private final UserMapper mapper;
 
-    @PostMapping("")
-    public ResponseEntity<UserDto> userProfile(@RequestBody Integer user_id){
-        UserDto userProfileDto = mapper.toDto(userProfileService.getUserDetailsById(user_id).get());
+    @RequestMapping("{user_id}")
+    public ResponseEntity<UserDto> userProfile(@PathVariable Integer user_id){
+        UserDto userProfileDto = userProfileService.getUserDetailsById(user_id);
         return ResponseEntity.ok(userProfileDto);
     }
     @GetMapping("")
     public ResponseEntity<UserDto> myProfile(){
-        UserDto userProfileDto = mapper.toDto(userProfileService.getCurrentUserDetails().get());
+        UserDto userProfileDto = userProfileService.getCurrentUserDetails();
         return ResponseEntity.ok(userProfileDto);
     }
+//    @PostMapping("/update")
+//    public ResponseEntity
 }

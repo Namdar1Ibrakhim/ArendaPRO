@@ -1,5 +1,7 @@
 package com.example.arendapro.service.impl;
 
+import com.example.arendapro.dto.UserDto;
+import com.example.arendapro.mapper.UserMapper;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.security.user.UserRepository;
 import com.example.arendapro.service.UserProfileService;
@@ -8,21 +10,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserProfileServiceImpl implements UserProfileService {
 
     private final UserRepository userRepository;
+    private final UserMapper mapper;
+
 
     @Override
-    public Optional<User> getCurrentUserDetails() {
+    public UserDto getCurrentUserDetails() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByEmail(auth.getName());
+        User user = userRepository.findByEmail(auth.getName()).get();
+        return mapper.toDto(user);
+
     }
     @Override
-    public Optional<User> getUserDetailsById(Integer id) {
-        return userRepository.findById(id);
+    public UserDto getUserDetailsById(Integer id) {
+        User user = userRepository.findById(id).get();
+        return mapper.toDto(user);
     }
 }
