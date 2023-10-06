@@ -1,5 +1,6 @@
 package com.example.arendapro.security.user;
 
+import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.security.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(name = "user")
 public class User implements UserDetails {
 
     @Id
@@ -31,6 +32,9 @@ public class User implements UserDetails {
     private String password;
 
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Immovables> immovables;
 
 
 
