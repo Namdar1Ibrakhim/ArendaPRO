@@ -30,4 +30,16 @@ public class UserProfileServiceImpl implements UserProfileService {
         User user = userRepository.findById(id).get();
         return mapper.toDto(user);
     }
+
+    @Override
+    public UserDto updateUserProfile(UserDto userDto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(auth.getName()).get();
+        user.setFirstname(userDto.getFirstname());
+        user.setLastname(userDto.getLastname());
+        user.setEmail(userDto.getEmail());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        userRepository.save(user);
+        return mapper.toDto(user);
+    }
 }

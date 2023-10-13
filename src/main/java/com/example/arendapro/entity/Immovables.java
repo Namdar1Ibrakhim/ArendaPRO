@@ -48,7 +48,4 @@ public class Immovables {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-
-
-
 }
