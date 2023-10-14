@@ -11,17 +11,14 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ImmovablesDto {
+
     private String title;
     private int numOfRooms;
     private double area;
     private String description;
     private long price;
-
     private PropertyType propertyType;
-
     private State state;
-
     private Status status;
 
-    private int address_id;
 }

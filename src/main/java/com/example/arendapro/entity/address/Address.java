@@ -45,15 +45,4 @@ public class Address {
     private int immovableNumber;
 
 
-
-
-
-
-
-
-
-
-
-
-
 }
