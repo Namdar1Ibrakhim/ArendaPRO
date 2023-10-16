@@ -10,8 +10,18 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
 
 
     @Override
-    public ImmovablesDto toDto(Immovables immovables) {
-        return null;
+    public ImmovablesDto toDto(Immovables immovables){
+        ImmovablesDto immovablesDto = new ImmovablesDto();
+        immovablesDto.setTitle(immovables.getTitle());
+        immovablesDto.setNumOfRooms(immovables.getNumOfRooms());
+        immovablesDto.setPrice(immovables.getPrice());
+        immovablesDto.setDescription(immovables.getDescription());
+        immovablesDto.setPropertyType(immovables.getPropertyType());
+        immovablesDto.setState(immovables.getState());
+        immovablesDto.setStatus(immovables.getStatus());
+        immovablesDto.setArea(immovables.getArea());
+
+        return immovablesDto;
     }
 
     @Override
@@ -20,6 +30,11 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
         immovables.setTitle(immovablesDto.getTitle());
         immovables.setNumOfRooms(immovablesDto.getNumOfRooms());
         immovables.setArea(immovablesDto.getArea());
+        immovables.setDescription(immovablesDto.getDescription());
+        immovables.setPrice(immovablesDto.getPrice());
+        immovables.setPropertyType(immovablesDto.getPropertyType());
+        immovables.setState(immovablesDto.getState());
+        immovables.setStatus(immovablesDto.getStatus());
         return immovables;
     }
 }
