@@ -5,4 +5,5 @@ import com.example.arendapro.dto.ImmovablesDto;
 
 public interface ImmovablesService {
     ImmovablesDto addImmovables(ImmovablesDto immovablesDto, AddressDto addressDto);
+    void deleteImmovables(Integer immovables_id) throws Exception;
 }

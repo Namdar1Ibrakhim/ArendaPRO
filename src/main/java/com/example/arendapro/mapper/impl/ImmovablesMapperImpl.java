@@ -18,7 +18,6 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
         immovablesDto.setDescription(immovables.getDescription());
         immovablesDto.setPropertyType(immovables.getPropertyType());
         immovablesDto.setState(immovables.getState());
-        immovablesDto.setStatus(immovables.getStatus());
         immovablesDto.setArea(immovables.getArea());
 
         return immovablesDto;
@@ -34,7 +33,6 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
         immovables.setPrice(immovablesDto.getPrice());
         immovables.setPropertyType(immovablesDto.getPropertyType());
         immovables.setState(immovablesDto.getState());
-        immovables.setStatus(immovablesDto.getStatus());
         return immovables;
     }
 }

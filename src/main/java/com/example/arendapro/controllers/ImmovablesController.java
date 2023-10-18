@@ -7,10 +7,7 @@ import jakarta.transaction.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +20,11 @@ public class ImmovablesController {
     public ResponseEntity<ImmovablesDto> addImmovables(@RequestBody ImmovablesDto immovablesDto, @RequestBody AddressDto addressDto){
         System.out.println(addressDto);
         return ResponseEntity.ok(immovablesService.addImmovables(immovablesDto, addressDto));
+    }
+    @DeleteMapping("{immovables_id}")
+    public ResponseEntity deleteImmovables(@PathVariable Integer immovables_id) throws Exception {
+        immovablesService.deleteImmovables(immovables_id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 

@@ -33,4 +33,15 @@ public class ImmovablesServiceImpl implements ImmovablesService {
         immovables.setAddress(addressMapper.toEntity(addressDto));
         return immovablesMapper.toDto(immovables);
     }
+
+    @Override
+    public void deleteImmovables(Integer immovables_id) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User owner = userRepository.findByEmail(auth.getName()).get();
+        Immovables immovables = immovablesRepository.findById(immovables_id).get();
+        if(!immovables.getOwner().equals(owner)){
+            throw new Exception();
+        }
+        immovablesRepository.delete(immovables);
+    }
 }

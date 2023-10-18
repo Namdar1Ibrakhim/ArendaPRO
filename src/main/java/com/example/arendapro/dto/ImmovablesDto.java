@@ -19,6 +19,4 @@ public class ImmovablesDto {
     private long price;
     private PropertyType propertyType;
     private State state;
-    private Status status;
-
 }
