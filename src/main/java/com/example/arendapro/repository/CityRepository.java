@@ -12,7 +12,7 @@ public interface CityRepository extends JpaRepository<City, Integer> {
 
     List<City> findAll();
 
-    Optional<City> findById();
+    Optional<City> findById(Integer id);
 
 
 }

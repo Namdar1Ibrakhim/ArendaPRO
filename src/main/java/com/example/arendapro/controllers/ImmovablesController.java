@@ -21,6 +21,7 @@ public class ImmovablesController {
 
     @PostMapping("/add")
     public ResponseEntity<ImmovablesDto> addImmovables(@RequestBody ImmovablesDto immovablesDto, @RequestBody AddressDto addressDto){
+        System.out.println(addressDto);
         return ResponseEntity.ok(immovablesService.addImmovables(immovablesDto, addressDto));
     }
 

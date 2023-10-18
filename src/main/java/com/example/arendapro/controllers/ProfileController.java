@@ -1,19 +1,15 @@
 package com.example.arendapro.controllers;
 
 import com.example.arendapro.dto.UserDto;
-import com.example.arendapro.mapper.UserMapper;
-import com.example.arendapro.security.user.User;
 import com.example.arendapro.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/profile")
+@RequestMapping("/api/auth/profile")
 public class ProfileController{
 
     private final UserProfileService userProfileService;

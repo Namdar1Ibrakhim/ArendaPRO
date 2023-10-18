@@ -8,12 +8,14 @@ import com.example.arendapro.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserProfileServiceImpl implements UserProfileService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper mapper;
 
@@ -39,6 +41,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         user.setLastname(userDto.getLastname());
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userRepository.save(user);
         return mapper.toDto(user);
     }
