@@ -14,6 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ImmovablesServiceImpl implements ImmovablesService {
@@ -24,7 +27,7 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     private final AddressMapper addressMapper;
 
     @Override
-    public ImmovablesDto addImmovables(ImmovablesDto immovablesDto, AddressDto addressDto){
+    public ImmovablesDto addImmovable(ImmovablesDto immovablesDto, AddressDto addressDto){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName()).get();
 
@@ -35,7 +38,7 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public void deleteImmovables(Integer immovables_id) throws Exception {
+    public void deleteImmovable(Integer immovables_id) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User owner = userRepository.findByEmail(auth.getName()).get();
         Immovables immovables = immovablesRepository.findById(immovables_id).get();
@@ -44,4 +47,19 @@ public class ImmovablesServiceImpl implements ImmovablesService {
         }
         immovablesRepository.delete(immovables);
     }
+
+    @Override
+    public ImmovablesDto editImmovable(ImmovablesDto immovablesDto, AddressDto addressDto) {
+        return null;
+    }
+
+    @Override
+    public List<ImmovablesDto> getAllImmovables() {
+        List<ImmovablesDto> list = new ArrayList<>();
+        for(Immovables immovables : immovablesRepository.findAll()){
+            list.add(immovablesMapper.toDto(immovables));
+        }
+        return list;
+    }
+
 }
