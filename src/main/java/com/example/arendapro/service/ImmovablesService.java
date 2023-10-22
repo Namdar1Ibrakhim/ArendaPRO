@@ -11,5 +11,6 @@ public interface ImmovablesService {
     void deleteImmovable(Integer immovables_id) throws Exception;
     ImmovablesDto editImmovable(ImmovablesDto immovablesDto, AddressDto addressDto);
     List<ImmovablesDto> getAllImmovables();
-
+    ImmovablesDto findImmovable(Integer immovables_id);
+    List<ImmovablesDto> findMyImmovables();
 }

@@ -36,8 +36,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner")
     private List<Immovables> immovables;
 
-
-
     @Enumerated(EnumType.STRING)
     private Role role;
 

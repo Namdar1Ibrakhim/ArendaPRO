@@ -32,5 +32,20 @@ public class ImmovablesController {
         return ResponseEntity.ok(immovablesService.getAllImmovables());
     }
 
+    @RequestMapping("/{immovables_id}")
+    public ResponseEntity<ImmovablesDto> getImmovable(@PathVariable Integer immovables_id){
+        return ResponseEntity.ok(immovablesService.findImmovable(immovables_id));
+    }
+
+    @GetMapping("/myImmovables")
+    public ResponseEntity<List<ImmovablesDto>> getAllMyImmovables(){
+        return ResponseEntity.ok(immovablesService.findMyImmovables());
+    }
+
+    @RequestMapping("/byOwner/{owner_id}")
+    public ResponseEntity<List<ImmovablesDto>> getAllMyImmovables(@PathVariable Integer owner_id){
+        return ResponseEntity.ok(immovablesService.findImmovablesByOwner(owner_id));
+    }
+
 
 }

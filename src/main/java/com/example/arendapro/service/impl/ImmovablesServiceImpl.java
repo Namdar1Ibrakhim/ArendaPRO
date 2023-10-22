@@ -62,4 +62,21 @@ public class ImmovablesServiceImpl implements ImmovablesService {
         return list;
     }
 
+    @Override
+    public ImmovablesDto findImmovable(Integer immovables_id) {
+        Immovables immovables = immovablesRepository.findById(immovables_id).get();
+        return immovablesMapper.toDto(immovables);
+    }
+
+    @Override
+    public List<ImmovablesDto> findMyImmovables() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User owner = userRepository.findByEmail(auth.getName()).get();
+        List<ImmovablesDto> list = new ArrayList<>();
+        for(Immovables immovable : immovablesRepository.findImmovablesByOwner(owner)){
+            list.add(immovablesMapper.toDto(immovable));
+        }
+        return list;
+    }
+
 }
