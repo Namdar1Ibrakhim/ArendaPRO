@@ -79,4 +79,13 @@ public class ImmovablesServiceImpl implements ImmovablesService {
         return list;
     }
 
+    @Override
+    public List<ImmovablesDto> findImmovablesByOwner(Integer owner_id) {
+        List<ImmovablesDto> list = new ArrayList<>();
+        for(Immovables immovable : immovablesRepository.findImmovablesByOwner_Id(owner_id)){
+            list.add(immovablesMapper.toDto(immovable));
+        }
+        return list;
+    }
+
 }

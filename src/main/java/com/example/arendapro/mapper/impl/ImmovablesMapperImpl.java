@@ -19,6 +19,7 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
         immovablesDto.setPropertyType(immovables.getPropertyType());
         immovablesDto.setState(immovables.getState());
         immovablesDto.setArea(immovables.getArea());
+        immovablesDto.setAddress(immovables.getAddress().getCountry()+", "+immovables.getAddress().getRegion()+", "+immovables.getAddress().getDistrict()+", "+immovables.getAddress().getCity()+", "+immovables.getAddress().getStreet()+", "+immovables.getAddress().getImmovableNumber());
 
         return immovablesDto;
     }

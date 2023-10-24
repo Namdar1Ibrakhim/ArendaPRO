@@ -13,4 +13,5 @@ public interface ImmovablesService {
     List<ImmovablesDto> getAllImmovables();
     ImmovablesDto findImmovable(Integer immovables_id);
     List<ImmovablesDto> findMyImmovables();
+    List<ImmovablesDto> findImmovablesByOwner(Integer owner_id);
 }
