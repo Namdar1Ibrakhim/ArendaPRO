@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("auth/immovables")
+@RequestMapping("/auth/immovables")
 public class ImmovablesController {
 
     private final ImmovablesService immovablesService;
