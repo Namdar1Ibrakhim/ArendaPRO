@@ -1,5 +1,6 @@
 package com.example.arendapro.security.user;
 
+import com.example.arendapro.entity.Favorites;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.security.token.Token;
 import jakarta.persistence.*;
@@ -41,6 +42,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user")
+    private List<Favorites> favorites;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.util.List;
+
 import static com.example.arendapro.enums.Status.MODERATION;
 
 
@@ -51,5 +53,8 @@ public class Immovables {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
+
+    @OneToMany(mappedBy = "immovable")
+    private List<Favorites> favorites;
 
 }
