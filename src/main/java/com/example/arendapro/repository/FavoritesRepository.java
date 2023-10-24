@@ -1,0 +1,13 @@
+package com.example.arendapro.repository;
+
+import com.example.arendapro.entity.Favorites;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface FavoritesRepository extends JpaRepository<Favorites, Integer> {
+
+    List<Favorites> findAllByUser_Id(Integer user_id);
+}

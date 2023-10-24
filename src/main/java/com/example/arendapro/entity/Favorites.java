@@ -27,5 +27,4 @@ public class Favorites {
     @JoinColumn(name = "immovables_id", nullable = false)
     private Immovables immovable;
 
-
 }

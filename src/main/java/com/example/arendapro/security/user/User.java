@@ -2,6 +2,7 @@ package com.example.arendapro.security.user;
 
 import com.example.arendapro.entity.Favorites;
 import com.example.arendapro.entity.Immovables;
+import com.example.arendapro.entity.Messages;
 import com.example.arendapro.security.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,17 +35,25 @@ public class User implements UserDetails {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "owner")
-    private List<Immovables> immovables;
-
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Immovables> immovables;
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
+    //Favorites
     @OneToMany(mappedBy = "user")
     private List<Favorites> favorites;
+
+    //Messages
+    @OneToMany(mappedBy = "sender")
+    private List<Messages> senderMessages;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Messages> receiverMessages;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
