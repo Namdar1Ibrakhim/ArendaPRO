@@ -7,6 +7,5 @@ import lombok.Setter;
 @Getter
 public class FavoritesRequestDto {
 
-    private int user_id;
     private int immovable_id;
 }
