@@ -45,4 +45,9 @@ public class UserProfileServiceImpl implements UserProfileService {
         userRepository.save(user);
         return mapper.toDto(user);
     }
+
+    @Override
+    public void deleteUserProfile(User user) {
+        userRepository.delete(user);
+    }
 }
