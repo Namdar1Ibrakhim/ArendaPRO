@@ -16,5 +16,5 @@ public class ImmovableRequestDto {
     private long price;
     private PropertyType propertyType;
     private State state;
-    private AddressDto addressDto;
+    private AddressRequestDto addressRequestDto;
 }

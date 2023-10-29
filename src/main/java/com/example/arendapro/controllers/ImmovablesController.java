@@ -1,6 +1,5 @@
 package com.example.arendapro.controllers;
 
-import com.example.arendapro.dto.AddressDto;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.service.ImmovablesService;

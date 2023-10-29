@@ -1,14 +1,16 @@
 package com.example.arendapro.service.impl;
 
-import com.example.arendapro.dto.AddressDto;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
+import com.example.arendapro.entity.address.Address;
 import com.example.arendapro.mapper.AddressMapper;
 import com.example.arendapro.mapper.ImmovablesMapper;
+import com.example.arendapro.repository.AddressRepository;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.security.user.UserRepository;
+import com.example.arendapro.service.AddressService;
 import com.example.arendapro.service.ImmovablesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -25,16 +27,17 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     private final ImmovablesRepository immovablesRepository;
     private final ImmovablesMapper immovablesMapper;
     private final UserRepository userRepository;
-    private final AddressMapper addressMapper;
+    private final AddressService addressService;
 
     @Override
     public ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName()).get();
-
+        Address address = addressService.addAddress(immovablesDto.getAddressRequestDto());
         Immovables immovables = immovablesMapper.toEntity(immovablesDto);
         immovables.setOwner(user);
-        immovables.setAddress(addressMapper.toEntity(immovablesDto.getAddressDto()));
+        immovables.setAddress(address);
+        immovablesRepository.save(immovables);
         return immovablesMapper.toDto(immovables);
     }
 

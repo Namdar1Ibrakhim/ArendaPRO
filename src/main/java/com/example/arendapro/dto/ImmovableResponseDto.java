@@ -2,7 +2,11 @@ package com.example.arendapro.dto;
 
 import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ImmovableResponseDto {
     private String title;
     private int numOfRooms;
