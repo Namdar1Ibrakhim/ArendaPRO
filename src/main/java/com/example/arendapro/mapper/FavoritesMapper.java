@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface FavoritesMapper{
     FavoritesDto toDto(Favorites favorites);
-    Favorites toEntity(FavoritesRequestDto favoritesRequestDto);
+    //Favorites toEntity(FavoritesRequestDto favoritesRequestDto);
 }
