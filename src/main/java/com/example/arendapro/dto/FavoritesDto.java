@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FavoritesResponseDto {
+public class FavoritesDto {
 
     private Integer user_id;
-    private ImmovablesDto immovablesDto;
+    private ImmovableRequestDto immovablesDto;
 }
