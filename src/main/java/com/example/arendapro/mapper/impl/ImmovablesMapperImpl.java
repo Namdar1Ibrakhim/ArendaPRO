@@ -1,6 +1,6 @@
 package com.example.arendapro.mapper.impl;
 
-import com.example.arendapro.dto.ImmovablesDto;
+import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.mapper.ImmovablesMapper;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,8 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
 
 
     @Override
-    public ImmovablesDto toDto(Immovables immovables){
-        ImmovablesDto immovablesDto = new ImmovablesDto();
+    public ImmovableRequestDto toDto(Immovables immovables){
+        ImmovableRequestDto immovablesDto = new ImmovableRequestDto();
         immovablesDto.setTitle(immovables.getTitle());
         immovablesDto.setNumOfRooms(immovables.getNumOfRooms());
         immovablesDto.setPrice(immovables.getPrice());
@@ -25,7 +25,7 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
     }
 
     @Override
-    public Immovables toEntity(ImmovablesDto immovablesDto) {
+    public Immovables toEntity(ImmovableRequestDto immovablesDto) {
         Immovables immovables = new Immovables();
         immovables.setTitle(immovablesDto.getTitle());
         immovables.setNumOfRooms(immovablesDto.getNumOfRooms());
