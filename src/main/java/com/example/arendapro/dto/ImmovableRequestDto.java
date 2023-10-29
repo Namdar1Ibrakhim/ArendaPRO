@@ -2,15 +2,12 @@ package com.example.arendapro.dto;
 
 import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
-import com.example.arendapro.enums.Status;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class ImmovablesDto {
+public class ImmovableRequestDto {
 
     private String title;
     private int numOfRooms;
@@ -19,5 +16,5 @@ public class ImmovablesDto {
     private long price;
     private PropertyType propertyType;
     private State state;
-    private String address;
+    private AddressDto addressDto;
 }

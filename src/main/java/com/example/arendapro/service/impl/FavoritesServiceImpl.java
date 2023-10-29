@@ -1,6 +1,6 @@
 package com.example.arendapro.service.impl;
 
-import com.example.arendapro.dto.FavoritesResponseDto;
+import com.example.arendapro.dto.FavoritesDto;
 import com.example.arendapro.entity.Favorites;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.mapper.FavoritesMapper;
@@ -27,11 +27,11 @@ public class FavoritesServiceImpl implements FavoritesService {
     private final ImmovablesRepository immovablesRepository;
 
     @Override
-    public List<FavoritesResponseDto> getAllMyFavorites() {
+    public List<FavoritesDto> getAllMyFavorites() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName()).get();
 
-        List<FavoritesResponseDto> list = new ArrayList<>();
+        List<FavoritesDto> list = new ArrayList<>();
         for(Favorites favorites: favoritesRepository.findAllByUser_Id(user.getId())){
             list.add(favoritesMapper.toDto(favorites));
         }
@@ -39,7 +39,7 @@ public class FavoritesServiceImpl implements FavoritesService {
     }
 
     @Override
-    public FavoritesResponseDto addFavorites(Integer immovable_id, User user) {
+    public FavoritesDto addFavorites(Integer immovable_id, User user) {
         Immovables immovables = immovablesRepository.findById(immovable_id).get();
         Favorites favorites =
                 Favorites.builder().
