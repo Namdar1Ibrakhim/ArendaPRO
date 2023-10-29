@@ -1,7 +1,8 @@
 package com.example.arendapro.service.impl;
 
 import com.example.arendapro.dto.AddressDto;
-import com.example.arendapro.dto.ImmovablesDto;
+import com.example.arendapro.dto.ImmovableRequestDto;
+import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.mapper.AddressMapper;
 import com.example.arendapro.mapper.ImmovablesMapper;
@@ -27,13 +28,13 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     private final AddressMapper addressMapper;
 
     @Override
-    public ImmovablesDto addImmovable(ImmovablesDto immovablesDto, AddressDto addressDto){
+    public ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName()).get();
 
         Immovables immovables = immovablesMapper.toEntity(immovablesDto);
         immovables.setOwner(user);
-        immovables.setAddress(addressMapper.toEntity(addressDto));
+        immovables.setAddress(addressMapper.toEntity(immovablesDto.getAddressDto()));
         return immovablesMapper.toDto(immovables);
     }
 
@@ -49,13 +50,13 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public ImmovablesDto editImmovable(ImmovablesDto immovablesDto, AddressDto addressDto) {
+    public ImmovableResponseDto editImmovable(ImmovableRequestDto immovablesDto) {
         return null;
     }
 
     @Override
-    public List<ImmovablesDto> getAllImmovables() {
-        List<ImmovablesDto> list = new ArrayList<>();
+    public List<ImmovableResponseDto> getAllImmovables() {
+        List<ImmovableResponseDto> list = new ArrayList<>();
         for(Immovables immovables : immovablesRepository.findAll()){
             list.add(immovablesMapper.toDto(immovables));
         }
@@ -63,16 +64,16 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public ImmovablesDto findImmovable(Integer immovables_id) {
+    public ImmovableResponseDto findImmovable(Integer immovables_id) {
         Immovables immovables = immovablesRepository.findById(immovables_id).get();
         return immovablesMapper.toDto(immovables);
     }
 
     @Override
-    public List<ImmovablesDto> findMyImmovables() {
+    public List<ImmovableResponseDto> findMyImmovables() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User owner = userRepository.findByEmail(auth.getName()).get();
-        List<ImmovablesDto> list = new ArrayList<>();
+        List<ImmovableResponseDto> list = new ArrayList<>();
         for(Immovables immovable : immovablesRepository.findImmovablesByOwner(owner)){
             list.add(immovablesMapper.toDto(immovable));
         }
@@ -80,8 +81,8 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public List<ImmovablesDto> findImmovablesByOwner(Integer owner_id) {
-        List<ImmovablesDto> list = new ArrayList<>();
+    public List<ImmovableResponseDto> findImmovablesByOwner(Integer owner_id) {
+        List<ImmovableResponseDto> list = new ArrayList<>();
         for(Immovables immovable : immovablesRepository.findImmovablesByOwner_Id(owner_id)){
             list.add(immovablesMapper.toDto(immovable));
         }
