@@ -1,5 +1,6 @@
 package com.example.arendapro.service;
 
+import com.example.arendapro.dto.AddressRequestDto;
 import com.example.arendapro.entity.address.*;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface AddressService {
     Region getRegionById(Integer id);
     List<Street> getAllStreets();
     Street getStreetById(Integer id);
+    Address addAddress(AddressRequestDto addressRequestDto);
 }
