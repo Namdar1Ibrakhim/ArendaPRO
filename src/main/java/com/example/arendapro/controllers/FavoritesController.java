@@ -1,7 +1,6 @@
 package com.example.arendapro.controllers;
 
-import com.example.arendapro.dto.FavoritesRequestDto;
-import com.example.arendapro.dto.FavoritesResponseDto;
+import com.example.arendapro.dto.FavoritesDto;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.service.FavoritesService;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +19,11 @@ public class FavoritesController {
     private final FavoritesService favoritesService;
 
     @GetMapping()
-    public ResponseEntity<List<FavoritesResponseDto>> getAllMyFavorites(){
+    public ResponseEntity<List<FavoritesDto>> getAllMyFavorites(){
         return ResponseEntity.ok(favoritesService.getAllMyFavorites());
     }
     @RequestMapping("/add/{immovable_id}")
-    public ResponseEntity<FavoritesResponseDto> addFavorites(@PathVariable Integer immovable_id, @AuthenticationPrincipal User user){
+    public ResponseEntity<FavoritesDto> addFavorites(@PathVariable Integer immovable_id, @AuthenticationPrincipal User user){
         return ResponseEntity.ok(favoritesService.addFavorites(immovable_id, user));
     }
     @DeleteMapping("/delete/favorites_id")
@@ -32,4 +31,5 @@ public class FavoritesController {
         favoritesService.deleteFavorites(favorites_id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 }
