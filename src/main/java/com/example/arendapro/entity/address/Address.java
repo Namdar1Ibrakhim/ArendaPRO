@@ -19,9 +19,6 @@ public class Address {
     @GeneratedValue
     private Integer id;
 
-    @OneToOne(mappedBy = "address")
-    private Immovables immovables;
-
     @OneToOne
     @JoinColumn(name = "country_id")
     private Country country;
@@ -43,6 +40,9 @@ public class Address {
     private District district;
 
     private int immovableNumber;
+
+    @OneToOne(mappedBy = "address")
+    private Immovables immovables;
 
 
 }

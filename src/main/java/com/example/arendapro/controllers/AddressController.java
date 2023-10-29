@@ -1,8 +1,6 @@
 package com.example.arendapro.controllers;
 
-import com.example.arendapro.dto.AddressDto;
 import com.example.arendapro.entity.address.*;
-import com.example.arendapro.repository.*;
 import com.example.arendapro.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
