@@ -71,21 +71,10 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address addAddress(AddressRequestDto addressRequestDto) {
-        Address address = new Address();
-        Country country = countryRepository.findById(addressRequestDto.getCountry_id()).get();
-        Region region = regionRepository.findById(addressRequestDto.getRegion_id()).get();
-        City city = cityRepository.findById(addressRequestDto.getCity_id()).get();
-        District district = districtRepository.findById(addressRequestDto.getDistrict_id()).get();
-        Street street = streetRepository.findById(addressRequestDto.getStreet_id()).get();
-        address.setCountry(country);
-        address.setRegion(region);
-        address.setCity(city);
-        address.setDistrict(district);
-        address.setStreet(street);
-        address.setImmovableNumber(addressRequestDto.getImmovableNumber());
+    public void addAddress(Address address) {
         addressRepository.save(address);
-        return address;
     }
+
+
 
 }

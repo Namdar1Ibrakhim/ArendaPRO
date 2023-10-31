@@ -1,11 +1,17 @@
 package com.example.arendapro.dto;
 
+import com.example.arendapro.entity.address.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AddressResponseDto {
-    private String country;
-    private String region;
-    private String city;
-    private String district;
-    private String street;
+    private Country country;
+    private Region region;
+    private City city;
+    private District district;
+    private Street street;
     private Integer immovableNumber;
 
 }

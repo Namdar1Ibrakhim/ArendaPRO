@@ -16,5 +16,6 @@ public interface AddressService {
     Region getRegionById(Integer id);
     List<Street> getAllStreets();
     Street getStreetById(Integer id);
-    Address addAddress(AddressRequestDto addressRequestDto);
+    void addAddress(Address address);
+
 }
