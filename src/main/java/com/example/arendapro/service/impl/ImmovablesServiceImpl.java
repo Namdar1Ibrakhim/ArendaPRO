@@ -28,12 +28,16 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     private final ImmovablesMapper immovablesMapper;
     private final UserRepository userRepository;
     private final AddressService addressService;
+    private final AddressMapper addressMapper;
 
     @Override
     public ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName()).get();
-        Address address = addressService.addAddress(immovablesDto.getAddressRequestDto());
+
+        Address address = addressMapper.toEntity(immovablesDto.getAddressRequestDto());
+        addressService.addAddress(address);
+
         Immovables immovables = immovablesMapper.toEntity(immovablesDto);
         immovables.setOwner(user);
         immovables.setAddress(address);

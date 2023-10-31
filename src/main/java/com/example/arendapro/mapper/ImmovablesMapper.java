@@ -3,8 +3,9 @@ package com.example.arendapro.mapper;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
-import org.mapstruct.Mapper;
+//import org.mapstruct.Mapper;
 
+//@Mapper(componentModel = "spring")
 public interface ImmovablesMapper {
 
     ImmovableResponseDto toDto(Immovables immovables);

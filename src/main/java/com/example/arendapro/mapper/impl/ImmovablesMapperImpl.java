@@ -39,6 +39,7 @@ public class ImmovablesMapperImpl implements ImmovablesMapper {
         immovables.setPrice(immovablesDto.getPrice());
         immovables.setPropertyType(immovablesDto.getPropertyType());
         immovables.setState(immovablesDto.getState());
+        immovables.setAddress(addressMapper.toEntity(immovablesDto.getAddressRequestDto()));
         return immovables;
     }
 }
