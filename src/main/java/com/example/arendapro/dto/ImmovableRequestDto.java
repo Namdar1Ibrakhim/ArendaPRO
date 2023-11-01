@@ -2,11 +2,11 @@ package com.example.arendapro.dto;
 
 import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+@Data
 public class ImmovableRequestDto {
 
     private String title;

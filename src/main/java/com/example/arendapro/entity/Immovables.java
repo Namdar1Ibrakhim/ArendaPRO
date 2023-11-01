@@ -7,19 +7,15 @@ import com.example.arendapro.enums.Status;
 import com.example.arendapro.security.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
 import java.util.List;
 
-import static com.example.arendapro.enums.Status.MODERATION;
 
 
-@Data
-@Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "Immovables")
+@Data
+@Builder
 public class Immovables {
 
     @Id
@@ -46,7 +42,6 @@ public class Immovables {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @Column(columnDefinition = "varchar(32) default 'MODERATION'")
     @Enumerated(EnumType.STRING)
     private Status status;
 
