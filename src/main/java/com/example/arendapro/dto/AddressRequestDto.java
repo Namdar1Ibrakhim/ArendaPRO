@@ -1,11 +1,11 @@
 package com.example.arendapro.dto;
 
 import com.example.arendapro.entity.address.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+@Data
 public class AddressRequestDto {
 
     private Integer country_id;

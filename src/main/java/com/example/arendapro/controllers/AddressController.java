@@ -2,6 +2,7 @@ package com.example.arendapro.controllers;
 
 import com.example.arendapro.entity.address.*;
 import com.example.arendapro.service.AddressService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
