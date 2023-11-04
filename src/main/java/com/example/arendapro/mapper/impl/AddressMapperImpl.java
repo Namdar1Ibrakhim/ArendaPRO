@@ -31,6 +31,7 @@ public class AddressMapperImpl implements AddressMapper {
 
     @Override
     public Address toEntity(AddressRequestDto addressRequestDto) {
+        System.out.println("**************************************************************");
         Address address = new Address();
         Country country = countryRepository.findById(addressRequestDto.getCountry_id()).get();
         Region region = regionRepository.findById(addressRequestDto.getRegion_id()).get();
@@ -43,6 +44,7 @@ public class AddressMapperImpl implements AddressMapper {
         address.setDistrict(district);
         address.setStreet(street);
         address.setImmovableNumber(addressRequestDto.getImmovableNumber());
+        System.out.println(address.toString());
         return address;
     }
 
