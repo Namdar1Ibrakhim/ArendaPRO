@@ -23,8 +23,8 @@ public class ProfileController{
         return ResponseEntity.ok(userProfileDto);
     }
     @GetMapping("")
-    public ResponseEntity<UserDto> myProfile(){
-        UserDto userProfileDto = userProfileService.getCurrentUserDetails();
+    public ResponseEntity<UserDto> myProfile(@AuthenticationPrincipal User user){
+        UserDto userProfileDto = userProfileService.getCurrentUserDetails(user);
         return ResponseEntity.ok(userProfileDto);
     }
     @PostMapping("/update")
