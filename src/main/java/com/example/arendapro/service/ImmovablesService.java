@@ -2,11 +2,12 @@ package com.example.arendapro.service;
 
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
+import com.example.arendapro.security.user.User;
 
 import java.util.List;
 
 public interface ImmovablesService {
-    ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto);
+    ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user);
     void deleteImmovable(Integer immovables_id) throws Exception;
     ImmovableResponseDto editImmovable(ImmovableRequestDto immovablesDto);
     List<ImmovableResponseDto> getAllImmovables();
