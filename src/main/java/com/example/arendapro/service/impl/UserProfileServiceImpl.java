@@ -21,9 +21,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
 
     @Override
-    public UserDto getCurrentUserDetails() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName()).get();
+    public UserDto getCurrentUserDetails(User user) {
         return mapper.toDto(user);
 
     }
