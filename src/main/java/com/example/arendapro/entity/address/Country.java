@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,6 +24,4 @@ public class Country {
 
     private String ISO;
 
-    @OneToOne(mappedBy = "country")
-    private Address address;
 }

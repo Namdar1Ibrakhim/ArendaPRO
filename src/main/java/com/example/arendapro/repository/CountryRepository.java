@@ -13,7 +13,6 @@ public interface CountryRepository extends JpaRepository<Country, Integer> {
 
     List<Country> findAll();
 
-    Optional<Country> findById(Integer id);
 
 
 }
