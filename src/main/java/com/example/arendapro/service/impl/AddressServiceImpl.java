@@ -72,7 +72,9 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void addAddress(Address address) {
+        System.out.println("************************");
         addressRepository.save(address);
+        System.out.println("****************************");
     }
 
 

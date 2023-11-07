@@ -19,23 +19,24 @@ public class Address {
     @GeneratedValue
     private Integer id;
 
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "street_id")
     private Street street;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "district_id")
     private District district;
 
