@@ -22,9 +22,8 @@ public class Favorites {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
     @ManyToOne
-    @JoinColumn(name = "immovables_id", nullable = false)
+    @JoinColumn(name = "immovable_id", nullable = false)
     private Immovables immovable;
 
 }

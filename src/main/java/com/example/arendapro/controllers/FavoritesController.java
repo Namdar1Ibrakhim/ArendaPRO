@@ -19,14 +19,14 @@ public class FavoritesController {
     private final FavoritesService favoritesService;
 
     @GetMapping()
-    public ResponseEntity<List<FavoritesDto>> getAllMyFavorites(){
-        return ResponseEntity.ok(favoritesService.getAllMyFavorites());
+    public ResponseEntity<List<FavoritesDto>> getAllMyFavorites(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok(favoritesService.getAllMyFavorites(user));
     }
     @RequestMapping("/add/{immovable_id}")
     public ResponseEntity<FavoritesDto> addFavorites(@PathVariable Integer immovable_id, @AuthenticationPrincipal User user){
         return ResponseEntity.ok(favoritesService.addFavorites(immovable_id, user));
     }
-    @DeleteMapping("/delete/favorites_id")
+    @RequestMapping("/delete/{favorites_id}")
     public ResponseEntity deleteFavorites(@PathVariable Integer favorites_id){
         favoritesService.deleteFavorites(favorites_id);
         return new ResponseEntity(HttpStatus.OK);

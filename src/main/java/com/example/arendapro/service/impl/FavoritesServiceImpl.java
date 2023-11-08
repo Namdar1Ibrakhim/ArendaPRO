@@ -10,13 +10,16 @@ import com.example.arendapro.security.user.User;
 import com.example.arendapro.security.user.UserRepository;
 import com.example.arendapro.service.FavoritesService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FavoritesServiceImpl implements FavoritesService {
@@ -27,10 +30,7 @@ public class FavoritesServiceImpl implements FavoritesService {
     private final ImmovablesRepository immovablesRepository;
 
     @Override
-    public List<FavoritesDto> getAllMyFavorites() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName()).get();
-
+    public List<FavoritesDto> getAllMyFavorites(User user) {
         List<FavoritesDto> list = new ArrayList<>();
         for(Favorites favorites: favoritesRepository.findAllByUser_Id(user.getId())){
             list.add(favoritesMapper.toDto(favorites));
@@ -40,13 +40,15 @@ public class FavoritesServiceImpl implements FavoritesService {
 
     @Override
     public FavoritesDto addFavorites(Integer immovable_id, User user) {
-        Immovables immovables = immovablesRepository.findById(immovable_id).get();
+        Optional<Immovables> immovables = immovablesRepository.findById(immovable_id);
+
+        log.info(immovables.get().getDescription());
         Favorites favorites =
                 Favorites.builder().
-                immovable(immovables)
+                immovable(immovables.get())
                 .user(user)
                 .build();
-        favoritesRepository.save(favorites);
+        favoritesRepository.save(Favorites.builder().build());
         return favoritesMapper.toDto(favorites);
 
     }

@@ -6,7 +6,7 @@ import com.example.arendapro.security.user.User;
 import java.util.List;
 
 public interface FavoritesService {
-    List<FavoritesDto> getAllMyFavorites();
+    List<FavoritesDto> getAllMyFavorites(User user);
     FavoritesDto addFavorites(Integer immovable_id, User user);
     void deleteFavorites(Integer favorites_id);
 }
