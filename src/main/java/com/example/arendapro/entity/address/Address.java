@@ -19,7 +19,6 @@ public class Address {
     @GeneratedValue
     private Integer id;
 
-
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
