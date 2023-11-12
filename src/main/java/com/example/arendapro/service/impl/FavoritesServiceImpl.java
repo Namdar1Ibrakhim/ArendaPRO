@@ -40,15 +40,12 @@ public class FavoritesServiceImpl implements FavoritesService {
 
     @Override
     public FavoritesDto addFavorites(Integer immovable_id, User user) {
-        Optional<Immovables> immovables = immovablesRepository.findById(immovable_id);
-
-        log.info(immovables.get().getDescription());
         Favorites favorites =
                 Favorites.builder().
-                immovable(immovables.get())
+                immovable(immovablesRepository.findById(immovable_id).get())
                 .user(user)
                 .build();
-        favoritesRepository.save(Favorites.builder().build());
+        favoritesRepository.save(favorites);
         return favoritesMapper.toDto(favorites);
 
     }
