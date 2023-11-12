@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -32,8 +35,6 @@ public class Messages {
 
     private String text;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+
 
 }
