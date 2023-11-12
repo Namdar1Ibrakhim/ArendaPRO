@@ -1,5 +1,6 @@
 insert into country
 values(1, 'KZ', 'Kazakhstan');
+
 insert into region
 values(1, 'Almaty');
 

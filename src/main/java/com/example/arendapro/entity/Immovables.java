@@ -49,4 +49,7 @@ public class Immovables {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
+    @OneToMany(mappedBy = "immovable")
+    private List<Favorites> favorites;
+
 }
