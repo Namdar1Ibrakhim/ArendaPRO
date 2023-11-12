@@ -25,13 +25,22 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse registerUser(RegisterRequest request) {
+        return register(request, Role.USER);
+    }
+
+    public AuthenticationResponse registerModerator(RegisterRequest request) {
+        return register(request, Role.ADMIN);
+    }
+
+    private AuthenticationResponse register(RegisterRequest request, Role role) {
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(role)
                 .build();
 
         var savedUser = repository.save(user);
@@ -42,6 +51,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
