@@ -2,6 +2,7 @@ package com.example.arendapro.service.impl;
 
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
+import com.example.arendapro.entity.ImageData;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.entity.address.Address;
 import com.example.arendapro.mapper.AddressMapper;
@@ -11,12 +12,15 @@ import com.example.arendapro.security.user.User;
 import com.example.arendapro.security.user.UserRepository;
 import com.example.arendapro.service.AddressService;
 import com.example.arendapro.service.ImmovablesService;
+import com.example.arendapro.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +34,17 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     private final UserRepository userRepository;
     private final AddressService addressService;
     private final AddressMapper addressMapper;
+    private final StorageService storageService;
 
     @Override
-    public ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user){
+    public ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user, MultipartFile file) throws IOException {
         Address address = addressMapper.toEntity(immovablesDto.getAddressRequestDto());
         addressService.addAddress(address);
 
         Immovables immovables = immovablesMapper.toEntity(immovablesDto);
         immovables.setOwner(user);
         immovables.setAddress(address);
+        immovables.setImageData(storageService.uploadImage(file));
         immovablesRepository.save(immovables);
 
         log.info(immovables.getAddress().toString());

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,9 +24,9 @@ public class ImmovablesController {
     private final ImmovablesService immovablesService;
 
     @PostMapping("/add")
-    public ResponseEntity<ImmovableResponseDto> addImmovable(@RequestBody ImmovableRequestDto immovablesDto, @AuthenticationPrincipal User user){
+    public ResponseEntity<ImmovableResponseDto> addImmovable(@RequestBody ImmovableRequestDto immovablesDto, @AuthenticationPrincipal User user, @RequestParam("image") MultipartFile file) {
         log.info("Log: " + immovablesDto.toString());
-        return ResponseEntity.ok(immovablesService.addImmovable(immovablesDto, user));
+        return ResponseEntity.ok(immovablesService.addImmovable(immovablesDto, user, file));
     }
     @DeleteMapping("{immovables_id}")
     public ResponseEntity deleteImmovable(@PathVariable Integer immovables_id) throws Exception {

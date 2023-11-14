@@ -36,6 +36,9 @@ public class Immovables {
 
     private long price;
 
+    @OneToOne
+    private ImageData imageData;
+
     @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
 
