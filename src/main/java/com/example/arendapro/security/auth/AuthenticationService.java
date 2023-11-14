@@ -9,6 +9,7 @@ import com.example.arendapro.security.user.Role;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,8 +29,12 @@ public class AuthenticationService {
     public AuthenticationResponse registerUser(RegisterRequest request) {
         return register(request, Role.USER);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public AuthenticationResponse registerModerator(RegisterRequest request) {
+        return register(request, Role.MODERATOR);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public AuthenticationResponse registerAdmin(RegisterRequest request) {
         return register(request, Role.ADMIN);
     }
 

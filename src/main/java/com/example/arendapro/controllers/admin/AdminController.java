@@ -20,8 +20,20 @@ public class AdminController{
     private final AuthenticationService authenticationService;
 
     @PostMapping("/createModerator")
-    public ResponseEntity createModeratorUser(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity createModerator(@RequestBody RegisterRequest registerRequest){
+        authenticationService.registerModerator(registerRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/createUser")
+    public ResponseEntity createUser(@RequestBody RegisterRequest registerRequest){
         authenticationService.registerUser(registerRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PostMapping("/createAdmin")
+    public ResponseEntity createAdmin(@RequestBody RegisterRequest registerRequest){
+        authenticationService.registerAdmin(registerRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
