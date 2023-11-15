@@ -2,21 +2,18 @@ package com.example.arendapro.service.impl;
 
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
-import com.example.arendapro.entity.ImageData;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.entity.address.Address;
 import com.example.arendapro.mapper.AddressMapper;
 import com.example.arendapro.mapper.ImmovablesMapper;
 import com.example.arendapro.repository.ImmovablesRepository;
+import com.example.arendapro.repository.StorageRepository;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.security.user.UserRepository;
 import com.example.arendapro.service.AddressService;
 import com.example.arendapro.service.ImmovablesService;
-import com.example.arendapro.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,20 +28,19 @@ public class ImmovablesServiceImpl implements ImmovablesService {
 
     private final ImmovablesRepository immovablesRepository;
     private final ImmovablesMapper immovablesMapper;
-    private final UserRepository userRepository;
     private final AddressService addressService;
     private final AddressMapper addressMapper;
-    private final StorageService storageService;
+    private final StorageRepository storageRepository;
 
     @Override
-    public ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user, MultipartFile file) throws IOException {
-        Address address = addressMapper.toEntity(immovablesDto.getAddressRequestDto());
+    public ImmovableResponseDto addImmovable(ImmovableRequestDto immovableDto, User user) throws IOException {
+        Address address = addressMapper.toEntity(immovableDto.getAddressRequestDto());
         addressService.addAddress(address);
 
-        Immovables immovables = immovablesMapper.toEntity(immovablesDto);
+
+        Immovables immovables = immovablesMapper.toEntity(immovableDto, storageRepository);
         immovables.setOwner(user);
         immovables.setAddress(address);
-        immovables.setImageData(storageService.uploadImage(file));
         immovablesRepository.save(immovables);
 
         log.info(immovables.getAddress().toString());
@@ -52,9 +48,7 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public void deleteImmovable(Integer immovables_id) throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User owner = userRepository.findByEmail(auth.getName()).get();
+    public void deleteImmovable(Integer immovables_id, User owner) throws Exception {
         Immovables immovables = immovablesRepository.findById(immovables_id).get();
         if(!immovables.getOwner().equals(owner)){
             throw new Exception();
@@ -83,11 +77,9 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public List<ImmovableResponseDto> findMyImmovables() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User owner = userRepository.findByEmail(auth.getName()).get();
+    public List<ImmovableResponseDto> findMyImmovables(User user) {
         List<ImmovableResponseDto> list = new ArrayList<>();
-        for(Immovables immovable : immovablesRepository.findImmovablesByOwner(owner)){
+        for(Immovables immovable : immovablesRepository.findImmovablesByOwner(user)){
             list.add(immovablesMapper.toDto(immovable));
         }
         return list;

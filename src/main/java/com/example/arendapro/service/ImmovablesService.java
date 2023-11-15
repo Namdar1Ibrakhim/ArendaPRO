@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ImmovablesService {
-    ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user, MultipartFile file) throws IOException;
-    void deleteImmovable(Integer immovables_id) throws Exception;
+    ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user) throws IOException;
+    void deleteImmovable(Integer immovables_id, User user) throws Exception;
     ImmovableResponseDto editImmovable(ImmovableRequestDto immovablesDto);
     List<ImmovableResponseDto> getAllImmovables();
     ImmovableResponseDto findImmovable(Integer immovables_id);
-    List<ImmovableResponseDto> findMyImmovables();
+    List<ImmovableResponseDto> findMyImmovables(User user);
     List<ImmovableResponseDto> findImmovablesByOwner(Integer owner_id);
 }
