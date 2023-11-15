@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -24,13 +25,13 @@ public class ImmovablesController {
     private final ImmovablesService immovablesService;
 
     @PostMapping("/add")
-    public ResponseEntity<ImmovableResponseDto> addImmovable(@RequestBody ImmovableRequestDto immovablesDto, @AuthenticationPrincipal User user, @RequestParam("image") MultipartFile file) {
+    public ResponseEntity<ImmovableResponseDto> addImmovable(@RequestBody ImmovableRequestDto immovablesDto, @AuthenticationPrincipal User user) throws IOException {
         log.info("Log: " + immovablesDto.toString());
-        return ResponseEntity.ok(immovablesService.addImmovable(immovablesDto, user, file));
+        return ResponseEntity.ok(immovablesService.addImmovable(immovablesDto, user));
     }
     @DeleteMapping("{immovables_id}")
-    public ResponseEntity deleteImmovable(@PathVariable Integer immovables_id) throws Exception {
-        immovablesService.deleteImmovable(immovables_id);
+    public ResponseEntity deleteImmovable(@PathVariable Integer immovables_id, @AuthenticationPrincipal User user) throws Exception {
+        immovablesService.deleteImmovable(immovables_id, user);
         return new ResponseEntity(HttpStatus.OK);
     }
     @GetMapping("")
@@ -44,12 +45,12 @@ public class ImmovablesController {
     }
 
     @GetMapping("/myImmovables")
-    public ResponseEntity<List<ImmovableResponseDto>> getAllMyImmovables(){
-        return ResponseEntity.ok(immovablesService.findMyImmovables());
+    public ResponseEntity<List<ImmovableResponseDto>> getAllMyImmovables(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok(immovablesService.findMyImmovables(user));
     }
 
     @RequestMapping("/byOwner/{owner_id}")
-    public ResponseEntity<List<ImmovableResponseDto>> getAllMyImmovables(@PathVariable Integer owner_id){
+    public ResponseEntity<List<ImmovableResponseDto>> getAllImmovablesByOwner_id(@PathVariable Integer owner_id){
         return ResponseEntity.ok(immovablesService.findImmovablesByOwner(owner_id));
     }
 

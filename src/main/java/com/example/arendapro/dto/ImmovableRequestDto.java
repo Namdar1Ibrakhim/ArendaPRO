@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Data
 public class ImmovableRequestDto {
 
@@ -17,4 +19,5 @@ public class ImmovableRequestDto {
     private PropertyType propertyType;
     private State state;
     private AddressRequestDto addressRequestDto;
+    private List<Integer> images;
 }

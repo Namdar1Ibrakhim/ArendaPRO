@@ -36,8 +36,8 @@ public class Immovables {
 
     private long price;
 
-    @OneToOne
-    private ImageData imageData;
+    @OneToMany(mappedBy = "immovable")
+    private List<ImageData> images;
 
     @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
