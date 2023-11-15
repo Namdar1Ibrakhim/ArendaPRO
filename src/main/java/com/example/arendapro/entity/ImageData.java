@@ -25,7 +25,8 @@ public class ImageData {
     @Column(name = "imagedata", length = 1000)
     private byte[] imageData;
 
-    @OneToOne
-    private Immovables immovables;
+    @ManyToOne
+    @JoinColumn(name = "immovable_id", nullable = false)
+    private Immovables immovable;
 
 }
