@@ -20,5 +20,5 @@ public class ImmovableResponseDto {
     private State state;
     private UserDto owner;
     private AddressResponseDto addressResponseDto;
-    private List<ImageData> images;
+    private List<Integer> images;
 }

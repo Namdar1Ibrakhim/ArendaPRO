@@ -26,7 +26,7 @@ public class ImageData {
     private byte[] imageData;
 
     @ManyToOne
-    @JoinColumn(name = "immovable_id", nullable = false)
+    @JoinColumn(name = "immovable_id")
     private Immovables immovable;
 
 }
