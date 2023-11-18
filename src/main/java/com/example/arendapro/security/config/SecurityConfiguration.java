@@ -26,6 +26,8 @@ public class SecurityConfiguration{
         http.csrf().disable().authorizeHttpRequests()
                 .requestMatchers("/admin/**")
                 .hasRole("ADMIN")
+                .requestMatchers("/moderator/**")
+                .hasRole("MODERATOR")
                 .requestMatchers("/api/auth/**")
                 .permitAll()
                 .requestMatchers(AUTH_WHITELIST).permitAll()
