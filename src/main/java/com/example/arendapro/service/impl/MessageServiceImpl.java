@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -38,6 +39,7 @@ public class MessageServiceImpl implements MessageService {
     public void sendMessage(MessageRequestDto messageRequstDto, User user) {
         Messages messages = messageMapper.toEntity(messageRequstDto, userRepository);
         messages.setSender(user);
+        messages.setCreatedAt(new Date());
 
         messageRepository.save(messages);
     }

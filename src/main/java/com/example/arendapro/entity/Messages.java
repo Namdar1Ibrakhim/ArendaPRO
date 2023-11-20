@@ -35,6 +35,8 @@ public class Messages {
 
     private String text;
 
+    private Date createdAt;
+
 
 
 }
