@@ -19,5 +19,4 @@ public class ImmovableRequestDto {
     private PropertyType propertyType;
     private State state;
     private AddressRequestDto addressRequestDto;
-    private List<Integer> images;
 }
