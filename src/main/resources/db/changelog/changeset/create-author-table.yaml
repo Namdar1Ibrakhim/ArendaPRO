@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-author
+      author: Ibralhim
+      changes:
+        - createTable:
+            tableName: author
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: sqlFile1
+      author: Ibralhim
+      changes:
+        - sqlFile:
+            splitStatement: true
+            path: db/changelog/changeset/20231119/script_1.sql
+            stripComments: true
