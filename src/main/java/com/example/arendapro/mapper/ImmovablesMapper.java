@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ImmovablesMapper{
 
-    @Mapping(target = "images", expression = "java(mapToImageData(immovable.getImages()))")
+    @Mapping(target = "images", expression = "java(mapToImageData(immovable))")
     ImmovableResponseDto toDto(Immovables immovable);
 
-    @Mapping(target = "images", expression = "java(mapToImageDataList(immovableRequestDto.getImages(), repository))")
-    Immovables toEntity(ImmovableRequestDto immovableRequestDto, StorageRepository repository);
+//  @Mapping(target = "images", expression = "java(mapToImageDataList(immovableRequestDto.getImages(), repository))")
+    Immovables toEntity(ImmovableRequestDto immovableRequestDto);
 
     List<ImmovableResponseDto> toDtoList(List<Immovables> list);
 
@@ -36,9 +37,10 @@ public interface ImmovablesMapper{
         }
         return imageDataList;
     }
-    default List<Integer> mapToImageData(List<ImageData> images){
+    default List<Integer> mapToImageData(Immovables immovables){
+
         List<Integer> imageData = new ArrayList<>();
-        for (ImageData image : images){
+        for (ImageData image : immovables.getImages()){
             imageData.add(image.getId());
         }
         return imageData;

@@ -7,6 +7,10 @@ import com.example.arendapro.enums.Status;
 import com.example.arendapro.security.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 
@@ -36,6 +40,8 @@ public class Immovables {
 
     private long price;
 
+    private Date createdAt;
+
     @OneToMany(mappedBy = "immovable")
     private List<ImageData> images;
 
@@ -54,5 +60,6 @@ public class Immovables {
 
     @OneToMany(mappedBy = "immovable")
     private List<Favorites> favorites;
+
 
 }

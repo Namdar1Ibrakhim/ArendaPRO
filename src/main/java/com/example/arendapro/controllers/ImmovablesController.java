@@ -2,6 +2,7 @@ package com.example.arendapro.controllers;
 
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
+import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.service.ImmovablesService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,11 @@ public class ImmovablesController {
         immovablesService.deleteImmovable(immovables_id, user);
         return new ResponseEntity(HttpStatus.OK);
     }
+    @PostMapping("/edit/{immovable_id}")
+    public ResponseEntity<ImmovableResponseDto> editImmovable(@RequestBody ImmovableRequestDto immovableRequestDto, @PathVariable Integer immovable_id, @AuthenticationPrincipal User user) throws AccessDeniedException, IOException {
+        return ResponseEntity.ok(immovablesService.editImmovable(immovable_id ,immovableRequestDto, user));
+    }
+
     @GetMapping("")
     public ResponseEntity<List<ImmovableResponseDto>> getAllImmovables(){
         return ResponseEntity.ok(immovablesService.getAllImmovables());
