@@ -3,6 +3,7 @@ package com.example.arendapro.service.impl;
 import com.example.arendapro.dto.MessageRequestDto;
 import com.example.arendapro.dto.MessageResponseDto;
 import com.example.arendapro.entity.Messages;
+import com.example.arendapro.exceptions.UserNotFoundException;
 import com.example.arendapro.mapper.MessageMapper;
 import com.example.arendapro.repository.MessageRepository;
 import com.example.arendapro.security.user.User;
@@ -31,12 +32,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Messages> getMessagesByReceiver(Integer id, User user) {
+    public List<Messages> getMessagesByUser(Integer id, User user) {
         return messageRepository.findAllByReceiver_IdAndSender_Id(id, user.getId());
     }
 
     @Override
-    public void sendMessage(MessageRequestDto messageRequstDto, User user) {
+    public void sendMessage(MessageRequestDto messageRequstDto, User user) throws UserNotFoundException {
+        if(!userRepository.findById(messageRequstDto.getReceiver_id()).isPresent()) throw new UserNotFoundException("Receiver not found with id: " +messageRequstDto.getReceiver_id());
+
         Messages messages = messageMapper.toEntity(messageRequstDto, userRepository);
         messages.setSender(user);
         messages.setCreatedAt(new Date());
