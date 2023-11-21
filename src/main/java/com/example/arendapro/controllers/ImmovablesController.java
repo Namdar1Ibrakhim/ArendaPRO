@@ -34,7 +34,6 @@ public class ImmovablesController {
 
     @DeleteMapping("{immovables_id}")
     public ResponseEntity<String> deleteImmovable(@PathVariable Integer immovables_id, @AuthenticationPrincipal User user) throws Exception {
-        immovablesService.deleteImmovable(immovables_id, user);
         return ResponseEntity.ok(immovablesService.deleteImmovable(immovables_id, user));
 
     }
@@ -46,24 +45,29 @@ public class ImmovablesController {
     @GetMapping("")
     public ResponseEntity<ImmovableWithCountView> getByPageAndLimit(@RequestParam(value = "page", defaultValue = "0") int page,
                                                                     @RequestParam(value = "limit", defaultValue = "25") int limit){
-        List<ImmovableResponseDto> list = immovablesService.getAllImmovables(page, limit);
+        List<ImmovableResponseDto> list = immovablesService.getAllActiveImmovables(page, limit);
         return ResponseEntity.ok(new ImmovableWithCountView(list, list.size()));
     }
 
     @RequestMapping("/{immovables_id}")
     public ResponseEntity<ImmovableResponseDto> getImmovable(@PathVariable Integer immovables_id){
-        return ResponseEntity.ok(immovablesService.findImmovable(immovables_id));
+        return ResponseEntity.ok(immovablesService.getActiveImmovable(immovables_id));
     }
 
     @GetMapping("/myImmovables")
     public ResponseEntity<List<ImmovableResponseDto>> getAllMyImmovables(@AuthenticationPrincipal User user){
-        return ResponseEntity.ok(immovablesService.findMyImmovables(user));
+        return ResponseEntity.ok(immovablesService.getAllMyImmovables(user));
     }
 
     @RequestMapping("/byOwner/{owner_id}")
     public ResponseEntity<List<ImmovableResponseDto>> getAllImmovablesByOwner_id(@PathVariable Integer owner_id){
-        return ResponseEntity.ok(immovablesService.findImmovablesByOwner(owner_id));
+        return ResponseEntity.ok(immovablesService.getActiveImmovablesByOwner(owner_id));
     }
+    @GetMapping("/getAll")
+    public ResponseEntity<List<ImmovableResponseDto>> getAll(){
+        return ResponseEntity.ok(immovablesService.getAllImmovables());
+    }
+
 
 
 }

@@ -4,6 +4,7 @@ import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.entity.address.Address;
+import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.exceptions.EntityNotFoundException;
 import com.example.arendapro.mapper.AddressMapper;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -49,9 +51,10 @@ public class ImmovablesServiceImpl implements ImmovablesService {
         immovables.setOwner(user);
         immovables.setAddress(address);
         immovables.setCreatedAt(new Date());
+        immovables.setStatus(Status.MODERATION);
         immovablesRepository.save(immovables);
 
-        return immovablesMapper.toDto(immovables);
+        return immovablesMapper.toDto(immovables, addressMapper);
     }
 
     @Override
@@ -82,47 +85,51 @@ public class ImmovablesServiceImpl implements ImmovablesService {
         }
         immovablesRepository.save(immovables);
 
-        return immovablesMapper.toDto(immovables);
+        return immovablesMapper.toDto(immovables, addressMapper);
 
 
     }
 
     @Override
-    public List<ImmovableResponseDto> getAllImmovables(int page, int limit) {
+    public List<ImmovableResponseDto> getAllActiveImmovables(int page, int limit) {
         if (page > 0) {
             page -= 1;
         }
         Pageable pageable = PageRequest.of(page, limit);
         List<ImmovableResponseDto> list = new ArrayList<>();
         for(Immovables immovables : immovablesRepository.findByOrderByCreatedAtDesc(pageable)){
-            list.add(immovablesMapper.toDto(immovables));
+            list.add(immovablesMapper.toDto(immovables, addressMapper));
         }
         return list;
     }
 
     @Override
-    public ImmovableResponseDto findImmovable(Integer immovables_id) {
+    public ImmovableResponseDto getActiveImmovable(Integer immovables_id) {
         Immovables immovables = immovablesRepository.findById(immovables_id)
                 .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovables_id));;
-        return immovablesMapper.toDto(immovables);
+        return immovablesMapper.toDto(immovables, addressMapper);
     }
 
     @Override
-    public List<ImmovableResponseDto> findMyImmovables(User user) {
+    public List<ImmovableResponseDto> getAllMyImmovables(User user) {
         List<ImmovableResponseDto> list = new ArrayList<>();
         for(Immovables immovable : immovablesRepository.findImmovablesByOwner(user)){
-            list.add(immovablesMapper.toDto(immovable));
+            list.add(immovablesMapper.toDto(immovable, addressMapper));
         }
         return list;
     }
 
     @Override
-    public List<ImmovableResponseDto> findImmovablesByOwner(Integer owner_id) {
+    public List<ImmovableResponseDto> getActiveImmovablesByOwner(Integer owner_id) {
         List<ImmovableResponseDto> list = new ArrayList<>();
         for(Immovables immovable : immovablesRepository.findImmovablesByOwner_Id(owner_id)){
-            list.add(immovablesMapper.toDto(immovable));
+            list.add(immovablesMapper.toDto(immovable, addressMapper));
         }
         return list;
+    }
+    @Override
+    public List<ImmovableResponseDto> getAllImmovables() {
+        return immovablesMapper.toDtoList(immovablesRepository.findAll());
     }
 
 }

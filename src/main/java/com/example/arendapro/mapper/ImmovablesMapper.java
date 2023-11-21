@@ -1,6 +1,7 @@
 package com.example.arendapro.mapper;
 
 import com.example.arendapro.dto.AddressRequestDto;
+import com.example.arendapro.dto.AddressResponseDto;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.ImageData;
@@ -22,8 +23,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ImmovablesMapper{
 
-    @Mapping(target = "images", expression = "java(mapToImageData(immovable))")
-    ImmovableResponseDto toDto(Immovables immovable);
+    @Mapping(target = "images", expression = "java(mapToImageData(immovable.getImages()))")
+    @Mapping(target = "addressResponseDto", expression = "java(getAddressResponseDto(immovable, addressMapper))")
+    ImmovableResponseDto toDto(Immovables immovable, AddressMapper addressMapper);
 
 //  @Mapping(target = "images", expression = "java(mapToImageDataList(immovableRequestDto.getImages(), repository))")
     Immovables toEntity(ImmovableRequestDto immovableRequestDto);
@@ -37,14 +39,19 @@ public interface ImmovablesMapper{
         }
         return imageDataList;
     }
-    default List<Integer> mapToImageData(Immovables immovables){
-
+    default List<Integer> mapToImageData(List<ImageData> imageDataList){
+        if (imageDataList==null){
+            return null;
+        }
         List<Integer> imageData = new ArrayList<>();
-        for (ImageData image : immovables.getImages()){
+        for (ImageData image : imageDataList){
             imageData.add(image.getId());
         }
         return imageData;
     }
-
+    default AddressResponseDto getAddressResponseDto(Immovables immovables, AddressMapper addressMapper){
+        Address address = immovables.getAddress();
+        return addressMapper.toDto(address);
+    }
 
 }

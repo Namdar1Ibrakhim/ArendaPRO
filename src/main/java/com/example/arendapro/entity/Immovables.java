@@ -52,7 +52,7 @@ public class Immovables {
     private State state;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'moderizing'")
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'moderating'")
     private Status status;
 
     @OneToOne(cascade = CascadeType.ALL)

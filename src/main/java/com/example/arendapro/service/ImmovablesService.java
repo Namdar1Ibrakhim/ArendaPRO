@@ -5,6 +5,7 @@ import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.model.ImmovableWithCountView;
 import com.example.arendapro.security.user.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,8 +15,11 @@ public interface ImmovablesService {
     ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user) throws IOException;
     String deleteImmovable(Integer immovables_id, User user) throws Exception;
     ImmovableResponseDto editImmovable(Integer immovable_id, ImmovableRequestDto immovableDto, User user) throws AccessDeniedException, IOException;
-    List<ImmovableResponseDto> getAllImmovables(int page, int limit);
-    ImmovableResponseDto findImmovable(Integer immovables_id);
-    List<ImmovableResponseDto> findMyImmovables(User user);
-    List<ImmovableResponseDto> findImmovablesByOwner(Integer owner_id);
+    List<ImmovableResponseDto> getAllActiveImmovables(int page, int limit);
+    ImmovableResponseDto getActiveImmovable(Integer immovables_id);
+    List<ImmovableResponseDto> getAllMyImmovables(User user);
+    List<ImmovableResponseDto> getActiveImmovablesByOwner(Integer owner_id);
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    List<ImmovableResponseDto> getAllImmovables();
 }
