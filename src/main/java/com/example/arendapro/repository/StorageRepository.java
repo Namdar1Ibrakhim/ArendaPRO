@@ -16,7 +16,8 @@ public interface StorageRepository extends JpaRepository<ImageData, Integer>{
 
     Optional<ImageData> findByName(String fileName);
 
-    @Transactional
     List<ImageData> findImageDataByImmovable_id(Integer immovable_id);
+
+    void deleteByImmovable_Id(Integer immovable_id);
 
 }

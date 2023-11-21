@@ -4,6 +4,7 @@ import com.example.arendapro.entity.ImageData;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.repository.StorageRepository;
+import com.example.arendapro.security.user.User;
 import com.example.arendapro.service.StorageService;
 import com.example.arendapro.util.ImageUtils;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,11 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void deleteImageById(Integer image_id) {
         storageRepository.delete(storageRepository.findById(image_id).get());
+    }
+
+    @Override
+    public void deleteImageByImmovable_id(Integer immovable_id) {
+        storageRepository.deleteByImmovable_Id(immovable_id);
     }
 
     public byte[] downloadImage(Integer id){

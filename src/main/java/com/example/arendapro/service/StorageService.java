@@ -1,6 +1,7 @@
 package com.example.arendapro.service;
 
 import com.example.arendapro.entity.Immovables;
+import com.example.arendapro.security.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -13,4 +14,6 @@ public interface StorageService {
     List<Integer> getImagesByImmovable(Integer immovable_id);
     String uploadImageList(MultipartFile[] file, Integer immovable_id) throws IOException;
     void deleteImageById(Integer image_id);
+
+    void deleteImageByImmovable_id(Integer immovable_id);
 }
