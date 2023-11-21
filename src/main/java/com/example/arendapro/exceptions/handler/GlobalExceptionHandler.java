@@ -4,6 +4,8 @@ import com.example.arendapro.dto.ErrorResponse;
 import com.example.arendapro.enums.ErrorCode;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.exceptions.EntityNotFoundException;
+import com.example.arendapro.exceptions.PasswordMismatchException;
+import com.example.arendapro.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +43,34 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> exceptionEntityNotFoundHandler(EntityNotFoundException e) {
+        log.info(e.getMessage());
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(e.getMessage())
                 .errorCode(ErrorCode.ENTITY_NOT_FOUND.getStatusCode())
+                .build();
+        return ResponseEntity
+                .badRequest()
+                .body(errorResponse);
+    }
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<ErrorResponse> exceptionPasswordMismatchHandler(PasswordMismatchException e) {
+        log.info(e.getMessage());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(e.getMessage())
+                .errorCode(ErrorCode.PASSWORD_MISMATCH.getStatusCode())
+                .build();
+        return ResponseEntity
+                .badRequest()
+                .body(errorResponse);
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionUserNotFoundHandler(UserNotFoundException e) {
+        log.info(e.getMessage());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(e.getMessage())
+                .errorCode(ErrorCode.USER_NOT_FOUND.getStatusCode())
                 .build();
         return ResponseEntity
                 .badRequest()
