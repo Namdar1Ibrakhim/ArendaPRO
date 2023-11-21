@@ -28,6 +28,7 @@ public class AddressMapperImpl implements AddressMapper {
         addressResponseDto.setRegion(address.getRegion());
         addressResponseDto.setCity(address.getCity());
         addressResponseDto.setStreet(address.getStreet());
+        addressResponseDto.setDistrict(address.getDistrict());
         addressResponseDto.setImmovableNumber(address.getImmovableNumber());
         return addressResponseDto;
     }
@@ -44,6 +45,7 @@ public class AddressMapperImpl implements AddressMapper {
         address.city(cityRepository.findById(addressRequestDto.getCity_id()).get());
         address.district(districtRepository.findById(addressRequestDto.getDistrict_id()).get());
         address.street(streetRepository.findById(addressRequestDto.getStreet_id()).get());
+        address.district(districtRepository.findById(addressRequestDto.getDistrict_id()).get());
         address.immovableNumber(addressRequestDto.getImmovableNumber());
         log.info(address.toString());
 
