@@ -8,6 +8,7 @@ import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.exceptions.EntityNotFoundException;
 import com.example.arendapro.mapper.AddressMapper;
 import com.example.arendapro.mapper.ImmovablesMapper;
+import com.example.arendapro.model.ImmovableWithCountView;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.repository.StorageRepository;
 import com.example.arendapro.security.user.User;
@@ -17,7 +18,10 @@ import com.example.arendapro.service.ImmovablesService;
 import com.example.arendapro.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -51,38 +55,46 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public void deleteImmovable(Integer immovables_id, User owner) throws Exception {
-        Immovables immovables = immovablesRepository.findById(immovables_id).get();
-        if(!immovables.getOwner().equals(owner)){
-            throw new Exception();
-        }
+    public String deleteImmovable(Integer immovables_id, User owner) throws Exception {
+        Immovables immovables = immovablesRepository.findById(immovables_id)
+                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovables_id));
+
+        log.info(owner.getRole().toString());
+        storageService.deleteImageByImmovable_id(immovables_id);
+        if(!immovables.getOwner().equals(owner) && !owner.getRole().toString().equals("ADMIN") && !owner.getRole().toString().equals("MODERATOR")) throw new AccessDeniedException("Access Denied, you can't delete");
         immovablesRepository.delete(immovables);
+
+        return "Successfully deleted";
     }
 
     @Override
     public ImmovableResponseDto editImmovable(Integer immovable_id, ImmovableRequestDto immovableDto, User user) throws AccessDeniedException, IOException {
         Immovables immovables = immovablesRepository.findById(immovable_id)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not fount with id: " + immovable_id));
-        if(immovables.getOwner().equals(user)){
-            immovables = immovablesMapper.toEntity(immovableDto);
-            if(immovableDto.getAddressRequestDto()!=null) {
-                Address address = addressMapper.toEntity(immovableDto.getAddressRequestDto());
-                addressService.addAddress(address);
-                immovables.setAddress(address);
-            }
-            immovablesRepository.save(immovables);
+                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovable_id));
 
-            return immovablesMapper.toDto(immovables);
-        }else{
-            throw new AccessDeniedException("Access denied");
+        if(!immovables.getOwner().equals(user) && !user.getRole().toString().equals("ADMIN") && !user.getRole().toString().equals("MODERATOR")) throw new AccessDeniedException("Access Denied, you can't edit");
+
+        immovables = immovablesMapper.toEntity(immovableDto);
+        if(immovableDto.getAddressRequestDto()!=null) {
+            Address address = addressMapper.toEntity(immovableDto.getAddressRequestDto());
+            addressService.addAddress(address);
+            immovables.setAddress(address);
         }
+        immovablesRepository.save(immovables);
+
+        return immovablesMapper.toDto(immovables);
+
 
     }
 
     @Override
-    public List<ImmovableResponseDto> getAllImmovables() {
+    public List<ImmovableResponseDto> getAllImmovables(int page, int limit) {
+        if (page > 0) {
+            page -= 1;
+        }
+        Pageable pageable = PageRequest.of(page, limit);
         List<ImmovableResponseDto> list = new ArrayList<>();
-        for(Immovables immovables : immovablesRepository.findAll()){
+        for(Immovables immovables : immovablesRepository.findByOrderByCreatedAtDesc(pageable)){
             list.add(immovablesMapper.toDto(immovables));
         }
         return list;
@@ -90,7 +102,8 @@ public class ImmovablesServiceImpl implements ImmovablesService {
 
     @Override
     public ImmovableResponseDto findImmovable(Integer immovables_id) {
-        Immovables immovables = immovablesRepository.findById(immovables_id).get();
+        Immovables immovables = immovablesRepository.findById(immovables_id)
+                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovables_id));;
         return immovablesMapper.toDto(immovables);
     }
 

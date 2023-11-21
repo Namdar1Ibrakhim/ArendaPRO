@@ -3,6 +3,7 @@ package com.example.arendapro.controllers;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.exceptions.AccessDeniedException;
+import com.example.arendapro.model.ImmovableWithCountView;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.service.ImmovablesService;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,12 @@ public class ImmovablesController {
         log.info("Log: " + immovablesDto.toString());
         return ResponseEntity.ok(immovablesService.addImmovable(immovablesDto, user));
     }
+
     @DeleteMapping("{immovables_id}")
-    public ResponseEntity deleteImmovable(@PathVariable Integer immovables_id, @AuthenticationPrincipal User user) throws Exception {
+    public ResponseEntity<String> deleteImmovable(@PathVariable Integer immovables_id, @AuthenticationPrincipal User user) throws Exception {
         immovablesService.deleteImmovable(immovables_id, user);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok(immovablesService.deleteImmovable(immovables_id, user));
+
     }
     @PostMapping("/edit/{immovable_id}")
     public ResponseEntity<ImmovableResponseDto> editImmovable(@RequestBody ImmovableRequestDto immovableRequestDto, @PathVariable Integer immovable_id, @AuthenticationPrincipal User user) throws AccessDeniedException, IOException {
@@ -41,8 +44,10 @@ public class ImmovablesController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<ImmovableResponseDto>> getAllImmovables(){
-        return ResponseEntity.ok(immovablesService.getAllImmovables());
+    public ResponseEntity<ImmovableWithCountView> getByPageAndLimit(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                    @RequestParam(value = "limit", defaultValue = "25") int limit){
+        List<ImmovableResponseDto> list = immovablesService.getAllImmovables(page, limit);
+        return ResponseEntity.ok(new ImmovableWithCountView(list, list.size()));
     }
 
     @RequestMapping("/{immovables_id}")
