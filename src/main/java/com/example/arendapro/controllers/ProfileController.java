@@ -1,6 +1,8 @@
 package com.example.arendapro.controllers;
 
+import com.example.arendapro.dto.PasswordEditRequest;
 import com.example.arendapro.dto.UserDto;
+import com.example.arendapro.exceptions.PasswordMismatchException;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
@@ -28,14 +30,21 @@ public class ProfileController{
         return ResponseEntity.ok(userProfileDto);
     }
     @PostMapping("/update")
-    public ResponseEntity updateUserProfile(@RequestBody UserDto userDto){
-        userProfileService.updateUserProfile(userDto);
+    public ResponseEntity updateUserProfile(@RequestBody UserDto userDto,  @AuthenticationPrincipal User user){
+        userProfileService.updateUserProfile(userDto, user);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
     @DeleteMapping("/delete")
     public ResponseEntity deleteUserProfile(@AuthenticationPrincipal User user){
         userProfileService.deleteUserProfile(user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/editPassword")
+    public ResponseEntity editPassword(@RequestBody PasswordEditRequest request, @AuthenticationPrincipal User user) throws PasswordMismatchException {
+        userProfileService.editPassword(request, user);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+
     }
 
 
