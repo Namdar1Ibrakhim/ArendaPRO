@@ -22,4 +22,5 @@ public interface ImmovablesService {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     List<ImmovableResponseDto> getAllImmovables();
+    void changeStatus(Integer immovable_id,String status, User user) throws AccessDeniedException;
 }

@@ -12,10 +12,10 @@ import java.util.List;
 @Setter
 public class ImmovableResponseDto {
     private String title;
-    private int numOfRooms;
-    private double area;
+    private Integer numOfRooms;
+    private Double area;
     private String description;
-    private long price;
+    private Long price;
     private PropertyType propertyType;
     private State state;
     private UserDto owner;

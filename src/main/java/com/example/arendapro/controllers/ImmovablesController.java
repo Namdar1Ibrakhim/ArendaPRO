@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -67,7 +66,9 @@ public class ImmovablesController {
     public ResponseEntity<List<ImmovableResponseDto>> getAll(){
         return ResponseEntity.ok(immovablesService.getAllImmovables());
     }
-
-
-
+    @RequestMapping("/changeStatus/{immovable_id}/{status}")
+    public ResponseEntity changeStatus(@PathVariable Integer immovable_id, @PathVariable String status, @AuthenticationPrincipal User user) throws AccessDeniedException {
+        immovablesService.changeStatus(immovable_id, status, user);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

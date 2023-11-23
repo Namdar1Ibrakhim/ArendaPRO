@@ -106,7 +106,7 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     @Override
     public ImmovableResponseDto getActiveImmovable(Integer immovables_id) {
         Immovables immovables = immovablesRepository.findById(immovables_id)
-                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovables_id));;
+                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovables_id));
         return immovablesMapper.toDto(immovables, addressMapper);
     }
 
@@ -130,6 +130,20 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     @Override
     public List<ImmovableResponseDto> getAllImmovables() {
         return immovablesMapper.toDtoList(immovablesRepository.findAll());
+    }
+
+    @Override
+    public void changeStatus(Integer immovable_id, String status, User user) throws AccessDeniedException {
+        Immovables immovables = immovablesRepository.findById(immovable_id)
+                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovable_id));
+
+        if(!immovables.getOwner().equals(user)) throw new AccessDeniedException("Access Denied, you can't edit");
+
+        if(status.equals("ACTIVE")){
+            immovables.setStatus(Status.ACTIVE);
+        }else if(status.equals("ARCHIVE")){
+            immovables.setStatus(Status.ARCHIVE);
+        }
     }
 
 }
