@@ -3,6 +3,7 @@ package com.example.arendapro.service.impl;
 import com.example.arendapro.dto.PasswordEditRequest;
 import com.example.arendapro.dto.UserDto;
 import com.example.arendapro.exceptions.PasswordMismatchException;
+import com.example.arendapro.exceptions.UserNotFoundException;
 import com.example.arendapro.mapper.UserMapper;
 import com.example.arendapro.security.user.User;
 import com.example.arendapro.security.user.UserRepository;
@@ -30,8 +31,9 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     }
     @Override
-    public UserDto getUserDetailsById(Integer id) {
-        User user = userRepository.findById(id).get();
+    public UserDto getUserDetailsById(Integer id) throws UserNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         return mapper.toDto(user);
     }
 
