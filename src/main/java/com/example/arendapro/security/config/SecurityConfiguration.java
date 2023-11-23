@@ -30,6 +30,8 @@ public class SecurityConfiguration{
                 .hasRole("MODERATOR")
                 .requestMatchers("/api/auth/**")
                 .permitAll()
+                .requestMatchers("/auth/immovables", "/auth/")
+                .permitAll()
                 .requestMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest()
                 .authenticated()

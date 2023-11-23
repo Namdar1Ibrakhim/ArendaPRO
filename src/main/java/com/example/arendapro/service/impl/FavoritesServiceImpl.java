@@ -3,6 +3,7 @@ package com.example.arendapro.service.impl;
 import com.example.arendapro.dto.FavoritesDto;
 import com.example.arendapro.entity.Favorites;
 import com.example.arendapro.entity.Immovables;
+import com.example.arendapro.exceptions.EntityNotFoundException;
 import com.example.arendapro.mapper.FavoritesMapper;
 import com.example.arendapro.repository.FavoritesRepository;
 import com.example.arendapro.repository.ImmovablesRepository;
@@ -25,7 +26,6 @@ import java.util.Optional;
 public class FavoritesServiceImpl implements FavoritesService {
 
     private final FavoritesRepository favoritesRepository;
-    private final UserRepository userRepository;
     private final FavoritesMapper favoritesMapper;
     private final ImmovablesRepository immovablesRepository;
 
@@ -40,14 +40,16 @@ public class FavoritesServiceImpl implements FavoritesService {
 
     @Override
     public FavoritesDto addFavorites(Integer immovable_id, User user) {
+        Immovables immovable = immovablesRepository.findById(immovable_id)
+                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovable_id));
+
         Favorites favorites =
                 Favorites.builder().
-                immovable(immovablesRepository.findById(immovable_id).get())
+                immovable(immovable)
                 .user(user)
                 .build();
         favoritesRepository.save(favorites);
         return favoritesMapper.toDto(favorites);
-
     }
 
     @Override
