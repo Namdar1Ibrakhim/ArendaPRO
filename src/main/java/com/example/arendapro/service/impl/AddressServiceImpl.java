@@ -2,6 +2,7 @@ package com.example.arendapro.service.impl;
 
 import com.example.arendapro.dto.AddressRequestDto;
 import com.example.arendapro.entity.address.*;
+import com.example.arendapro.exceptions.EntityNotFoundException;
 import com.example.arendapro.repository.*;
 import com.example.arendapro.service.AddressService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public City getCityById(Integer id) {
-        return cityRepository.findById(id).get();
+        return cityRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException("City not fount with id: " + id));
     }
 
     @Override
@@ -50,7 +52,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Country getCountryById(Integer id) {
-        return countryRepository.findById(id).get();
+        return countryRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException("Country not fount with id: " + id));
     }
 
 
@@ -72,7 +75,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public District getDistrictsById(Integer id) {
-        return districtRepository.findById(id).get();
+        return districtRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException("District not fount with id: " + id));
     }
 
     @Override
@@ -93,7 +97,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Region getRegionById(Integer id) {
-        return regionRepository.findById(id).get();
+        return regionRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException("Region not fount with id: " + id));
     }
 
     @Override
@@ -113,7 +118,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Street getStreetById(Integer id) {
-        return streetRepository.findById(id).get();
+        return streetRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException("Street not fount with id: " + id));
     }
 
     @Override
