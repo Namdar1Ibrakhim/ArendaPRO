@@ -1,8 +1,9 @@
-package com.example.arendapro.security.user;
+package com.example.arendapro.entity;
 
 import com.example.arendapro.entity.Favorites;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.entity.Messages;
+import com.example.arendapro.enums.Role;
 import com.example.arendapro.security.token.Token;
 import jakarta.persistence.*;
 import lombok.*;

@@ -3,7 +3,7 @@
 //
 //import com.example.arendapro.dto.UserDto;
 //import com.example.arendapro.mapper.UserMapper;
-//import com.example.arendapro.security.user.User;
+//import com.example.arendapro.entity.User;
 //import org.springframework.stereotype.Component;
 //
 //@Component

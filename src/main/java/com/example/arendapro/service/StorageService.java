@@ -1,7 +1,5 @@
 package com.example.arendapro.service;
 
-import com.example.arendapro.entity.Immovables;
-import com.example.arendapro.security.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

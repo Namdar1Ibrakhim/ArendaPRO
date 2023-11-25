@@ -1,7 +1,7 @@
 package com.example.arendapro.mapper;
 
 import com.example.arendapro.dto.UserDto;
-import com.example.arendapro.security.user.User;
+import com.example.arendapro.entity.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

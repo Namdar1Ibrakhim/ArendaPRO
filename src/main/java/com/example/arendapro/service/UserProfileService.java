@@ -4,7 +4,7 @@ import com.example.arendapro.dto.PasswordEditRequest;
 import com.example.arendapro.dto.UserDto;
 import com.example.arendapro.exceptions.PasswordMismatchException;
 import com.example.arendapro.exceptions.UserNotFoundException;
-import com.example.arendapro.security.user.User;
+import com.example.arendapro.entity.User;
 
 public interface UserProfileService {
     UserDto getCurrentUserDetails(User user);

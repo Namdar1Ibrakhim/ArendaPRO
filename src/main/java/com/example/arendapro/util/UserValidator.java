@@ -1,7 +1,7 @@
 package com.example.arendapro.util;
 
 
-import com.example.arendapro.security.user.User;
+import com.example.arendapro.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

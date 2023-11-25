@@ -5,15 +5,14 @@ import com.example.arendapro.dto.UserDto;
 import com.example.arendapro.exceptions.PasswordMismatchException;
 import com.example.arendapro.exceptions.UserNotFoundException;
 import com.example.arendapro.mapper.UserMapper;
-import com.example.arendapro.security.user.User;
-import com.example.arendapro.security.user.UserRepository;
+import com.example.arendapro.entity.User;
+import com.example.arendapro.repository.UserRepository;
 import com.example.arendapro.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -38,6 +37,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    @Transactional
     public UserDto updateUserProfile(UserDto userDto, User user) {
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());
@@ -48,11 +48,13 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    @Transactional
     public void deleteUserProfile(User user) {
         userRepository.delete(user);
     }
 
     @Override
+    @Transactional
     public void editPassword(PasswordEditRequest request, User user) throws PasswordMismatchException {
         if(!request.getPassword().equals(request.getNewPassword())) throw new PasswordMismatchException("Password mismatch");
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));

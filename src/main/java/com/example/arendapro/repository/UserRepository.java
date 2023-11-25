@@ -1,5 +1,6 @@
-package com.example.arendapro.security.user;
+package com.example.arendapro.repository;
 
+import com.example.arendapro.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,14 +1,13 @@
 package com.example.arendapro.service.impl;
 
 import com.example.arendapro.entity.ImageData;
-import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.repository.StorageRepository;
-import com.example.arendapro.security.user.User;
 import com.example.arendapro.service.StorageService;
 import com.example.arendapro.util.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -24,6 +23,7 @@ public class StorageServiceImpl implements StorageService {
     private final ImmovablesRepository immovablesRepository;
 
     @Override
+    @Transactional
     public String uploadImage(MultipartFile file, Integer immovable_id) throws IOException {
         ImageData imageData = storageRepository.save(ImageData.builder()
                     .name(file.getOriginalFilename())
@@ -37,6 +37,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
+    @Transactional
     public String uploadImageList(MultipartFile[] files, Integer immovable_id) throws IOException {
         for (MultipartFile file : files) {
              storageRepository.save(ImageData.builder()
