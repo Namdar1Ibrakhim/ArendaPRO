@@ -1,10 +1,9 @@
 package com.example.arendapro.security.config;
 
-import com.example.arendapro.security.user.Role;
-import com.example.arendapro.security.user.User;
-import com.example.arendapro.security.user.UserRepository;
+import com.example.arendapro.enums.Role;
+import com.example.arendapro.entity.User;
+import com.example.arendapro.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
