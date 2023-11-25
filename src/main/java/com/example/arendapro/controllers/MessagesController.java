@@ -4,7 +4,7 @@ import com.example.arendapro.dto.MessageRequestDto;
 import com.example.arendapro.dto.MessageResponseDto;
 import com.example.arendapro.entity.Messages;
 import com.example.arendapro.exceptions.UserNotFoundException;
-import com.example.arendapro.security.user.User;
+import com.example.arendapro.entity.User;
 import com.example.arendapro.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

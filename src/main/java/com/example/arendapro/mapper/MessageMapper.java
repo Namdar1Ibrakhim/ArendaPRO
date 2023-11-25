@@ -3,8 +3,8 @@ package com.example.arendapro.mapper;
 import com.example.arendapro.dto.MessageRequestDto;
 import com.example.arendapro.dto.MessageResponseDto;
 import com.example.arendapro.entity.Messages;
-import com.example.arendapro.security.user.User;
-import com.example.arendapro.security.user.UserRepository;
+import com.example.arendapro.entity.User;
+import com.example.arendapro.repository.UserRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
