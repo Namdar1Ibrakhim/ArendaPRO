@@ -4,12 +4,9 @@ import com.example.arendapro.entity.address.Address;
 import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
 import com.example.arendapro.enums.Status;
-import com.example.arendapro.security.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 

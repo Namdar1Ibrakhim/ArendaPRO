@@ -1,7 +1,7 @@
 package com.example.arendapro.service;
 
 import com.example.arendapro.dto.FavoritesDto;
-import com.example.arendapro.security.user.User;
+import com.example.arendapro.entity.User;
 
 import java.util.List;
 

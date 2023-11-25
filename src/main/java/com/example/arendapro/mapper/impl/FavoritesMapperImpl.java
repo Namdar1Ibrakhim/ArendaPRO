@@ -6,7 +6,7 @@
 //import com.example.arendapro.mapper.FavoritesMapper;
 //import com.example.arendapro.mapper.ImmovablesMapper;
 //import com.example.arendapro.repository.ImmovablesRepository;
-//import com.example.arendapro.security.user.UserRepository;
+//import com.example.arendapro.repository.UserRepository;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Component;
 //

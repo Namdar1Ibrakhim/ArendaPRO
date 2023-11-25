@@ -2,10 +2,7 @@ package com.example.arendapro.exceptions.handler;
 
 import com.example.arendapro.dto.ErrorResponse;
 import com.example.arendapro.enums.ErrorCode;
-import com.example.arendapro.exceptions.AccessDeniedException;
-import com.example.arendapro.exceptions.EntityNotFoundException;
-import com.example.arendapro.exceptions.PasswordMismatchException;
-import com.example.arendapro.exceptions.UserNotFoundException;
+import com.example.arendapro.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +15,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+
+    @ExceptionHandler(UserAlreadyExistAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> exceptionUserAlreadyExistHandler(UserAlreadyExistAuthenticationException e){
+        log.info(e.getMessage());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(e.getMessage())
+                .errorCode(ErrorCode.USER_EXISTS.getStatusCode())
+                .build();
+        return ResponseEntity
+                .badRequest()
+                .body(errorResponse);
+    }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> exceptionAccessDeniedHandler(AccessDeniedException e) {

@@ -1,7 +1,7 @@
 package com.example.arendapro.controllers;
 
 import com.example.arendapro.dto.FavoritesDto;
-import com.example.arendapro.security.user.User;
+import com.example.arendapro.entity.User;
 import com.example.arendapro.service.FavoritesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,5 +31,6 @@ public class FavoritesController {
         favoritesService.deleteFavorites(favorites_id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 
 }

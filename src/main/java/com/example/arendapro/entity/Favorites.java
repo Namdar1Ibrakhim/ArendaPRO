@@ -1,6 +1,5 @@
 package com.example.arendapro.entity;
 
-import com.example.arendapro.security.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
