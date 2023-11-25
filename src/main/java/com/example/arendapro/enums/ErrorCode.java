@@ -11,7 +11,8 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(402),
     ACCESS_DENIED(403),
     PASSWORD_MISMATCH(404),
-    USER_NOT_FOUND(405);
+    USER_NOT_FOUND(405),
+    USER_EXISTS(406);
 
 
     private final int statusCode;

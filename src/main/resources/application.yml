@@ -1,6 +1,12 @@
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   liquibase:
     enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   datasource:
     url: jdbc:postgresql://localhost:5432/jwt_security
     username: postgres
@@ -8,7 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -16,3 +22,14 @@ spring:
         globally_quoted_identifiers: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+rabbitmq:
+  queue:
+    name: javaquides
+    json:
+      name: javaquides_json
+  exchange:
+    name: javaquides_exchange
+  routing:
+    key: javaquides_routing_key
+    json:
+      key: javaquides_routing_json_key

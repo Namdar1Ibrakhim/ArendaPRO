@@ -1,6 +1,6 @@
 package com.example.arendapro.security.config;
 
-import com.example.arendapro.security.user.UserRepository;
+import com.example.arendapro.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
