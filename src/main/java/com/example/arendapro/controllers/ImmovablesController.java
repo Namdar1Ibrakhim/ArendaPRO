@@ -2,9 +2,13 @@ package com.example.arendapro.controllers;
 
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
+import com.example.arendapro.dto.StatusDto;
+import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
+import com.example.arendapro.mapper.ImmovablesMapper;
 import com.example.arendapro.model.ImmovableWithCountView;
-import com.example.arendapro.security.user.User;
+import com.example.arendapro.entity.User;
+import com.example.arendapro.rabbitmq.RabbitMQProducer;
 import com.example.arendapro.service.ImmovablesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +28,7 @@ import java.util.List;
 public class ImmovablesController {
 
     private final ImmovablesService immovablesService;
+
 
     @PostMapping("/add")
     public ResponseEntity<ImmovableResponseDto> addImmovable(@RequestBody ImmovableRequestDto immovablesDto, @AuthenticationPrincipal User user) throws IOException {
@@ -66,9 +71,9 @@ public class ImmovablesController {
     public ResponseEntity<List<ImmovableResponseDto>> getAll(){
         return ResponseEntity.ok(immovablesService.getAllImmovables());
     }
-    @RequestMapping("/changeStatus/{immovable_id}/{status}")
-    public ResponseEntity changeStatus(@PathVariable Integer immovable_id, @PathVariable String status, @AuthenticationPrincipal User user) throws AccessDeniedException {
-        immovablesService.changeStatus(immovable_id, status, user);
+    @RequestMapping("/changeStatus/{immovable_id}")
+    public ResponseEntity changeStatus(@PathVariable Integer immovable_id, @RequestBody StatusDto statusDto, @AuthenticationPrincipal User user) throws AccessDeniedException {
+        immovablesService.changeStatus(immovable_id, statusDto.getStatus(), user);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
