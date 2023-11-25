@@ -1,4 +1,4 @@
-package com.example.arendapro.security.user;
+package com.example.arendapro.enums;
 
 public enum Role {
     USER, MODERATOR, ADMIN
