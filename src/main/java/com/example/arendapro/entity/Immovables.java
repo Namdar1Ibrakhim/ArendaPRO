@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
+@Table(name = "immovables")
 public class Immovables {
 
     @Id
@@ -49,7 +50,6 @@ public class Immovables {
     private State state;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'moderating'")
     private Status status;
 
     @OneToOne(cascade = CascadeType.ALL)
