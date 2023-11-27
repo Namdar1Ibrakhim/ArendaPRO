@@ -3,6 +3,9 @@ package com.example.arendapro.controllers;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.dto.StatusDto;
+import com.example.arendapro.entity.Immovables;
+import com.example.arendapro.enums.PropertyType;
+import com.example.arendapro.enums.State;
 import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.mapper.ImmovablesMapper;
@@ -52,6 +55,20 @@ public class ImmovablesController {
         List<ImmovableResponseDto> list = immovablesService.getAllActiveImmovables(page, limit);
         return ResponseEntity.ok(new ImmovableWithCountView(list, list.size()));
     }
+    @GetMapping("/filteredImmovsbles")
+    public List<Immovables> getFilteredImmovables(@RequestParam(required = false) Long minPrice,
+                                                  @RequestParam(required = false) Long maxPrice,
+                                                  @RequestParam(required = false) Integer minNumOfRooms,
+                                                  @RequestParam(required = false) Integer maxNumOfRooms,
+                                                  @RequestParam(required = false) Double minArea,
+                                                  @RequestParam(required = false) Double maxArea,
+                                                  @RequestParam(required = false) State state,
+                                                  @RequestParam(required = false) PropertyType propertyType){
+        return immovablesService.filterImmovables(
+                minPrice, maxPrice, minNumOfRooms, maxNumOfRooms, minArea, maxArea, state, propertyType
+        );
+    }
+
 
     @RequestMapping("/{immovables_id}")
     public ResponseEntity<ImmovableResponseDto> getImmovable(@PathVariable Integer immovables_id){
