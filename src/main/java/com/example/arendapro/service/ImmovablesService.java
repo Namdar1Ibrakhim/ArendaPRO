@@ -2,6 +2,9 @@ package com.example.arendapro.service;
 
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
+import com.example.arendapro.entity.Immovables;
+import com.example.arendapro.enums.PropertyType;
+import com.example.arendapro.enums.State;
 import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.entity.User;
@@ -23,4 +26,6 @@ public interface ImmovablesService {
     List<ImmovableResponseDto> getAllImmovables();
 
     void changeStatus(Integer immovable_id, Status status, User user) throws AccessDeniedException;
+
+    List<Immovables> filterImmovables(Long minPrice, Long maxPrice, Integer minNumOfRooms, Integer maxNumOfRooms, Double minArea, Double maxArea, State state, PropertyType propertyType);
 }

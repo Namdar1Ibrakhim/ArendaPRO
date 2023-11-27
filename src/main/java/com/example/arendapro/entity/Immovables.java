@@ -30,13 +30,13 @@ public class Immovables {
 
     private String title;
 
-    private int numOfRooms;
+    private Integer numOfRooms;
 
-    private double area;
+    private Double area;
 
     private String description;
 
-    private long price;
+    private Long price;
 
     private Date createdAt;
 

@@ -4,6 +4,8 @@ import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.entity.address.Address;
+import com.example.arendapro.enums.PropertyType;
+import com.example.arendapro.enums.State;
 import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.exceptions.EntityNotFoundException;
@@ -156,6 +158,11 @@ public class ImmovablesServiceImpl implements ImmovablesService {
         }else if(status.equals("ARCHIVE")){
             immovables.setStatus(Status.ARCHIVE);
         }
+    }
+
+    @Override
+    public List<Immovables> filterImmovables(Long minPrice, Long maxPrice, Integer minNumOfRooms, Integer maxNumOfRooms, Double minArea, Double maxArea, State state, PropertyType propertyType) {
+        return immovablesRepository.findByFilter(minPrice, maxPrice, minNumOfRooms, maxNumOfRooms, minArea, maxArea, state, propertyType);
     }
 
 }
