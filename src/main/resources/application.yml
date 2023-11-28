@@ -1,3 +1,9 @@
+name:
+  service:
+    geocoder:
+      url: https://geocode-maps.yandex.ru/1.x?apikey=
+
+
 spring:
   session:
     store-type: redis
