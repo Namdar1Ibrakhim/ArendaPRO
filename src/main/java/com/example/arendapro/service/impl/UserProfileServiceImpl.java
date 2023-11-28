@@ -56,7 +56,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     @Transactional
     public void editPassword(PasswordEditRequest request, User user) throws PasswordMismatchException {
-        if(!request.getPassword().equals(request.getNewPassword())) throw new PasswordMismatchException("Password mismatch");
+        if(!request.getRePassword().equals(request.getNewPassword())) throw new PasswordMismatchException("Password mismatch");
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
