@@ -10,6 +10,12 @@ import com.example.arendapro.enums.Role;
 import com.example.arendapro.entity.User;
 import com.example.arendapro.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -26,6 +33,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CacheManager cacheManager;
 
 
     public AuthenticationResponse registerUser(RegisterRequest request) {
@@ -53,11 +61,18 @@ public class AuthenticationService {
                 .build();
 
         var savedUser = repository.save(user);
-        var jwtToken = jwtService.genarateToken(user);
+        var jwtAccessToken = jwtService.genarateAccessToken(user);
+        var jwtRefreshToken = jwtService.genarateRefreshToken(user);
 
-        saveUserToken(savedUser, jwtToken);
+        log.info(savedUser.getId().toString());
+//        cacheManager.getCache("redis-cache").put(savedUser.getId(), "UserProfileService::getUserDetailsById");
+//        cacheManager.getCache("redis-cache").put(savedUser.getEmail(), "UserProfileService::getUserDetailsByEmail");
+
+        saveUserToken(savedUser, jwtAccessToken);
+        saveUserToken(savedUser, jwtRefreshToken);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(jwtAccessToken)
+                .refreshToken(jwtRefreshToken)
                 .build();
     }
 
@@ -67,11 +82,14 @@ public class AuthenticationService {
                         request.getEmail(), request.getPassword())
         );
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.genarateToken(user);
+        var jwtAccessToken = jwtService.genarateAccessToken(user);
+        var jwtRefreshToken = jwtService.genarateRefreshToken(user);
+
 
         revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        saveUserToken(user, jwtAccessToken);
+        saveUserToken(user, jwtRefreshToken);
+        return AuthenticationResponse.builder().accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
     }
     private void revokeAllUserTokens(User user){
         var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
