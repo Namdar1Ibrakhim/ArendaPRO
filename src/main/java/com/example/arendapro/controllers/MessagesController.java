@@ -6,6 +6,7 @@ import com.example.arendapro.entity.Messages;
 import com.example.arendapro.exceptions.UserNotFoundException;
 import com.example.arendapro.entity.User;
 import com.example.arendapro.service.MessageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class MessagesController {
         return ResponseEntity.ok(messageService.getAllMyMessage(user));
     }
     @PostMapping("/send")
-    public ResponseEntity sendMessage(@RequestBody MessageRequestDto messageRequstDto, @AuthenticationPrincipal User sender) throws UserNotFoundException {
+    public ResponseEntity sendMessage(@RequestBody @Valid MessageRequestDto messageRequstDto, @AuthenticationPrincipal User sender) throws UserNotFoundException {
         messageService.sendMessage(messageRequstDto, sender);
         return new ResponseEntity(HttpStatus.OK);
     }

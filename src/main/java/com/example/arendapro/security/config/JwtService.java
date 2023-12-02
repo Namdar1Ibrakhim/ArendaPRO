@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
 
-    private static final String SECRET_KEY = "2B4B6250655368566D5971337336763979244226452948404D635166546A576E";
+    @Value("${spring.jwt.secret-key}")
+    private String SECRET_KEY;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -29,11 +33,26 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String genarateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails);
+    public String genarateAccessToken(UserDetails userDetails){
+        return generateAccessToken(new HashMap<>(), userDetails);
+    }
+    public String genarateRefreshToken(UserDetails userDetails){
+        return generateRefreshToken(new HashMap<>(), userDetails);
+    }
+    public String generateRefreshToken(
+            Map<String, Object> extractClaims,
+            UserDetails userDetails
+    ){
+        return Jwts.builder()
+                .setClaims(extractClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*1000*60*24))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    public String generateToken(
+    public String generateAccessToken(
             Map<String, Object> extractClaims,
             UserDetails userDetails
     ){
