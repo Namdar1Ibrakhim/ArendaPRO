@@ -5,8 +5,18 @@ name:
 
 
 spring:
-  session:
-    store-type: redis
+  jwt:
+    secret-key: 2B4B6250655368566D5971337336763979244226452948404D635166546A576E
+  cache:
+    type: redis
+    cache-names: redis-cache
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: SWJyYWtoaW0yMDA0
+#  session:
+#    store-type: redis
   rabbitmq:
     host: localhost
     port: 5672
@@ -22,7 +32,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -30,10 +40,12 @@ spring:
         globally_quoted_identifiers: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  data:
-    redis:
-      host: localhost
-      port: 6379
+
+  minio:
+    bucket: images
+    url: http://localhost:9000
+    accessKey: minioadmin
+    secretKey: minioadmin
 
 rabbitmq:
   queue:
@@ -46,3 +58,5 @@ rabbitmq:
     key: javaquides_routing_key
     json:
       key: javaquides_routing_json_key
+
+
