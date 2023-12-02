@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
-public class UserDto {
+public class UserDto{
 
     @NotNull(message = "First name is required")
     private String firstname;

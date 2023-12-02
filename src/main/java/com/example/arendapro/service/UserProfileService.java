@@ -8,8 +8,14 @@ import com.example.arendapro.entity.User;
 
 public interface UserProfileService {
     UserDto getCurrentUserDetails(User user);
+
     UserDto getUserDetailsById(Integer id) throws UserNotFoundException;
+
     UserDto updateUserProfile(UserDto userDto, User user);
+
     void deleteUserProfile(User user);
+
     void editPassword(PasswordEditRequest request, User user) throws PasswordMismatchException;
+
+    UserDto getUserDetailsByEmail(String email);
 }

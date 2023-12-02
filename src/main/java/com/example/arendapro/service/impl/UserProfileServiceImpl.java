@@ -9,7 +9,12 @@ import com.example.arendapro.entity.User;
 import com.example.arendapro.repository.UserRepository;
 import com.example.arendapro.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +35,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     }
     @Override
+//    @Cacheable(value = "UserProfileService::getUserDetailsById", key = "#id")
     public UserDto getUserDetailsById(Integer id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
@@ -37,7 +43,20 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    @SneakyThrows
+//    @Cacheable(value = "UserProfileService::getUserDetailsByEmail", key = "#email")
+    public UserDto getUserDetailsByEmail(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        return mapper.toDto(user);
+    }
+
+    @Override
     @Transactional
+//    @Caching(put = {
+//            @CachePut(value = "UserProfileService::getUserDetailsById", key = "#user.id"),
+//            @CachePut(value = "UserProfileService::getUserDetailsByEmail", key = "#user.email")
+//    })
     public UserDto updateUserProfile(UserDto userDto, User user) {
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());
@@ -49,6 +68,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     @Transactional
+//    @CacheEvict(value = "UserProfileService::getUserDetailsById", key = "#user.id")
     public void deleteUserProfile(User user) {
         userRepository.delete(user);
     }
