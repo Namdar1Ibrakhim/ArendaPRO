@@ -6,6 +6,7 @@ import com.example.arendapro.exceptions.PasswordMismatchException;
 import com.example.arendapro.exceptions.UserNotFoundException;
 import com.example.arendapro.entity.User;
 import com.example.arendapro.service.UserProfileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +20,24 @@ public class ProfileController{
 
     private final UserProfileService userProfileService;
 
-    @RequestMapping("{user_id}")
-    public ResponseEntity<UserDto> userProfile(@PathVariable Integer user_id) throws UserNotFoundException {
+    @RequestMapping("/{user_id}")
+    public ResponseEntity<UserDto> getUserProfileById(@PathVariable Integer user_id) throws UserNotFoundException {
         UserDto userProfileDto = userProfileService.getUserDetailsById(user_id);
         return ResponseEntity.ok(userProfileDto);
     }
+    @RequestMapping("/byEmail/{email}")
+    public ResponseEntity<UserDto> getUserProfileByEmail(@PathVariable String email){
+        UserDto userDto = userProfileService.getUserDetailsByEmail(email);
+        return ResponseEntity.ok(userDto);
+    }
+
     @GetMapping("")
     public ResponseEntity<UserDto> myProfile(@AuthenticationPrincipal User user){
         UserDto userProfileDto = userProfileService.getCurrentUserDetails(user);
         return ResponseEntity.ok(userProfileDto);
     }
     @PostMapping("/update")
-    public ResponseEntity updateUserProfile(@RequestBody UserDto userDto,  @AuthenticationPrincipal User user){
+    public ResponseEntity updateUserProfile(@RequestBody @Valid UserDto userDto, @AuthenticationPrincipal User user){
         userProfileService.updateUserProfile(userDto, user);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
@@ -40,7 +47,7 @@ public class ProfileController{
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/editPassword")
-    public ResponseEntity editPassword(@RequestBody PasswordEditRequest request, @AuthenticationPrincipal User user) throws PasswordMismatchException {
+    public ResponseEntity editPassword(@RequestBody @Valid PasswordEditRequest request, @AuthenticationPrincipal User user) throws PasswordMismatchException {
         userProfileService.editPassword(request, user);
         return new ResponseEntity<>(HttpStatus.OK);
 
