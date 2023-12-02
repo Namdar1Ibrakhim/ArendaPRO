@@ -1,7 +1,9 @@
 package com.example.arendapro.service.impl;
 
+import com.example.arendapro.dto.ImmovableImageRequestDto;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
+import com.example.arendapro.entity.ImmovableImage;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.entity.address.Address;
 import com.example.arendapro.enums.PropertyType;
@@ -12,20 +14,23 @@ import com.example.arendapro.exceptions.EntityNotFoundException;
 import com.example.arendapro.mapper.AddressMapper;
 import com.example.arendapro.mapper.ImmovablesMapper;
 import com.example.arendapro.rabbitmq.RabbitMQProducer;
+import com.example.arendapro.repository.ImmovableImageRepository;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.enums.Role;
 import com.example.arendapro.entity.User;
 import com.example.arendapro.service.AddressService;
+import com.example.arendapro.service.ImageService;
 import com.example.arendapro.service.ImmovablesService;
-import com.example.arendapro.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,13 +46,15 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     private final ImmovablesMapper immovablesMapper;
     private final AddressService addressService;
     private final AddressMapper addressMapper;
-    private final StorageService storageService;
     private final RabbitMQProducer producer;
+    private final ImageService imageService;
+    private final ImmovableImageRepository immovableImageRepository;
 
 
-    @Transactional
     @Override
+    @Transactional
     public ImmovableResponseDto addImmovable(ImmovableRequestDto immovableDto, User user) throws IOException {
+        log.info(immovableDto.getAddressRequestDto().toString());
         Address address = addressMapper.toEntity(immovableDto.getAddressRequestDto());
         addressService.addAddress(address);
 
@@ -96,7 +103,6 @@ public class ImmovablesServiceImpl implements ImmovablesService {
 
         log.info(owner.getRole().toString());
         if(!immovables.getOwner().equals(owner) && !owner.getRole().toString().equals("MODERATOR")) throw new AccessDeniedException("Access Denied, you can't delete");
-        storageService.deleteImageByImmovable_id(immovables_id);
         addressService.deleteAddress(immovables_id);
         immovablesRepository.delete(immovables);
 
@@ -117,8 +123,8 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public ImmovableResponseDto getActiveImmovable(Integer immovables_id) {
-        Immovables immovables = immovablesRepository.findById(immovables_id)
+    public ImmovableResponseDto getActiveImmovableById(Integer immovables_id) {
+        Immovables immovables = immovablesRepository.findByActiveId(immovables_id)
                 .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovables_id));
         return immovablesMapper.toDto(immovables, addressMapper);
     }
@@ -148,13 +154,13 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     @Override
     @Transactional
     public void changeStatus(Integer immovable_id, Status status, User user) throws AccessDeniedException {
-        Immovables immovables = immovablesRepository.findById(immovable_id)
+        Immovables immovables = immovablesRepository.findByActiveId(immovable_id)
                 .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovable_id));
 
         if(!immovables.getOwner().equals(user) && status.equals(Status.MODERATION)) throw new AccessDeniedException("Access Denied, you can't edit");
 
         if(status.equals("ACTIVE")){
-            immovables.setStatus(Status.ACTIVE);
+            immovables.setStatus(Status.MODERATION);
         }else if(status.equals("ARCHIVE")){
             immovables.setStatus(Status.ARCHIVE);
         }
@@ -163,6 +169,22 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     @Override
     public List<Immovables> filterImmovables(Long minPrice, Long maxPrice, Integer minNumOfRooms, Integer maxNumOfRooms, Double minArea, Double maxArea, State state, PropertyType propertyType) {
         return immovablesRepository.findByFilter(minPrice, maxPrice, minNumOfRooms, maxNumOfRooms, minArea, maxArea, state, propertyType);
+    }
+
+    @Override
+    @Transactional
+    public void uploadImage(Integer id, MultipartFile image) {
+        Immovables immovables = immovablesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + id));
+
+        String fileName = imageService.upload(image);
+        immovables.getImages().add(fileName);
+        immovablesRepository.save(immovables);
+
+        ImmovableImage immovableImage = ImmovableImage.builder()
+                .immovable(immovables)
+                .image(fileName).build();
+        immovableImageRepository.save(immovableImage);
     }
 
 }

@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface ImmovablesRepository extends JpaRepository<Immovables, Integer>{
 
     @Query("SELECT i FROM Immovables i WHERE i.id =:id and i.status = 'ACTIVE'")
-    Optional<Immovables> findById(Integer id);
+    Optional<Immovables> findByActiveId(Integer id);
 
     @Query("SELECT i FROM Immovables i WHERE i.owner =:owner")
     List<Immovables> findImmovablesByOwner(User owner);

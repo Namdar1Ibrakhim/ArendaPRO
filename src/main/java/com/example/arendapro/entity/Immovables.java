@@ -7,6 +7,7 @@ import com.example.arendapro.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @Data
 @Builder
 @Table(name = "immovables")
-public class Immovables {
+public class Immovables implements Serializable {
 
     @Id
     @GeneratedValue
@@ -40,8 +41,10 @@ public class Immovables {
 
     private Date createdAt;
 
-    @OneToMany(mappedBy = "immovable")
-    private List<ImageData> images;
+    @Column(name = "images")
+    @CollectionTable(name = "images")
+    @ElementCollection
+    private List<String> images;
 
     @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
