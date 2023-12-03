@@ -1,10 +1,7 @@
 package com.example.arendapro.entity;
 
-import com.example.arendapro.entity.Favorites;
-import com.example.arendapro.entity.Immovables;
-import com.example.arendapro.entity.Messages;
-import com.example.arendapro.enums.Role;
 import com.example.arendapro.security.token.Token;
+import com.example.arendapro.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "user")
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue

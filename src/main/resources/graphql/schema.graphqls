@@ -1,0 +1,9 @@
+type Query {
+    userById(id: ID): User
+}
+
+type Mutation {
+    updateUser(dto: InputUser): User
+    deleteUser(id: ID): Boolean
+
+}

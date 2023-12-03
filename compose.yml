@@ -1,0 +1,66 @@
+version: '3.8'
+
+
+services:
+#  app:
+#    build:
+#      context: .
+#    container_name: tasklist
+#    depends_on:
+#      - db
+#      - minio
+#      - redis
+#    env_file:
+#      - .env
+#    ports:
+#      - '8080:8080'
+
+  rabbitmq:
+    image: rabbitmq:3.10.5-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  postgres:
+    container_name: postgres-container
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: jwt_security
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: always
+
+  redis:
+    image: redis
+    restart: always
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass SWJyYWtoaW0yMDA0
+    volumes:
+      - cache:/data
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY}
+    command: server ~/minio --console-address :9090
+    ports:
+      - '9090:9090'
+      - '9000:9000'
+    volumes:
+      - minio-data:/minio
+
+volumes:
+  postgres-data:
+    driver: local
+  minio-data:
+    driver: local
+  cache:
+    driver: local

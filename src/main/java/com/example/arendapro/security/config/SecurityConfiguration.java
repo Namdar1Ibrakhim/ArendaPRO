@@ -1,11 +1,10 @@
 package com.example.arendapro.security.config;
 
-import com.example.arendapro.enums.Role;
+import com.example.arendapro.security.config.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,6 +31,8 @@ public class SecurityConfiguration{
                     .authorizeHttpRequests(auth->{
                         auth.requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .requestMatchers("/moderator/**").hasAuthority("MODERATOR")
+                                .requestMatchers("/graphiql")
+                                .permitAll()
                                 .requestMatchers("/api/auth/**", "/auth/immovables", "/auth/").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated();
@@ -45,8 +46,7 @@ public class SecurityConfiguration{
                     .addLogoutHandler(logoutHandler)
                     .logoutSuccessHandler(((request, response, authentication) ->
                             SecurityContextHolder.clearContext())
-                    )
-        ;
+                    );
         return http.build();
     }
 

@@ -11,7 +11,6 @@ import com.example.arendapro.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -35,7 +34,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     }
     @Override
-//    @Cacheable(value = "UserProfileService::getUserDetailsById", key = "#id")
+    @Cacheable(value = "UserProfileService::getUserDetailsById", key = "#id")
     public UserDto getUserDetailsById(Integer id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));

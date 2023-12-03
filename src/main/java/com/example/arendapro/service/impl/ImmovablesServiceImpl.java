@@ -1,6 +1,5 @@
 package com.example.arendapro.service.impl;
 
-import com.example.arendapro.dto.ImmovableImageRequestDto;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.ImmovableImage;
@@ -23,9 +22,6 @@ import com.example.arendapro.service.ImageService;
 import com.example.arendapro.service.ImmovablesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

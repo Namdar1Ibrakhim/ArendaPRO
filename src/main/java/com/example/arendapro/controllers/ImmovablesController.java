@@ -1,18 +1,14 @@
 package com.example.arendapro.controllers;
 
-import com.example.arendapro.dto.ImmovableImageRequestDto;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.dto.StatusDto;
-import com.example.arendapro.entity.ImmovableImage;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
-import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.model.ImmovableWithCountView;
 import com.example.arendapro.entity.User;
-import com.example.arendapro.rabbitmq.RabbitMQProducer;
 import com.example.arendapro.service.ImmovablesService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

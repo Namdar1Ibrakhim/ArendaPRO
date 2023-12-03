@@ -1,4 +1,4 @@
-package com.example.arendapro.security.config;
+package com.example.arendapro.config;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;

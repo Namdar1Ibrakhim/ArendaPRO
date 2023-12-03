@@ -19,6 +19,7 @@ public class AddressController {
 
     private final AddressService addressService;
 
+
     @GetMapping("/cities")
     public ResponseEntity<List<City>> getCities(){
         return ResponseEntity.ok(addressService.getAllCities());

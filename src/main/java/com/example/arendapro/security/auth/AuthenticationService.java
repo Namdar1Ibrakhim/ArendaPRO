@@ -11,11 +11,9 @@ import com.example.arendapro.entity.User;
 import com.example.arendapro.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,6 +47,9 @@ public class AuthenticationService {
     }
 
     @Transactional
+//    @Caching(put = {
+//            @CachePut(value = "UserProfileService::getUserDetailsById", key = "#user.id"),
+//    })
     public AuthenticationResponse register(RegisterRequest request, Role role) {
         if(repository.findByEmail(request.getEmail()).isPresent()) throw new UserAlreadyExistAuthenticationException("User is already exists with this email");
         var user = User.builder()
@@ -65,7 +66,7 @@ public class AuthenticationService {
         var jwtRefreshToken = jwtService.genarateRefreshToken(user);
 
         log.info(savedUser.getId().toString());
-//        cacheManager.getCache("redis-cache").put(savedUser.getId(), "UserProfileService::getUserDetailsById");
+        cacheManager.getCache("redis-cache").put(savedUser.getId(), "UserProfileService::getUserDetailsById");
 //        cacheManager.getCache("redis-cache").put(savedUser.getEmail(), "UserProfileService::getUserDetailsByEmail");
 
         saveUserToken(savedUser, jwtAccessToken);

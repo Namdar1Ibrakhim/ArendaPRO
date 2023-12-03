@@ -1,10 +1,8 @@
 package com.example.arendapro.controllers.admin;
 
-import com.example.arendapro.dto.UserDto;
 import com.example.arendapro.entity.User;
 import com.example.arendapro.security.auth.AuthenticationService;
 import com.example.arendapro.security.auth.RegisterRequest;
-import com.example.arendapro.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

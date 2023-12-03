@@ -1,4 +1,4 @@
-package com.example.arendapro.security.config;
+package com.example.arendapro.config;
 
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.enums.Role;
@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,7 +55,6 @@ public class AdminUserInitializer implements CommandLineRunner {
                     }
                 };
                 timer.scheduleAtFixedRate(timerTask, 0, 24*60*60*1000);
-
             }
         });
         thread.start();

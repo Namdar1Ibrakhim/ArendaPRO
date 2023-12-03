@@ -1,6 +1,5 @@
 package com.example.arendapro.service;
 
-import com.example.arendapro.dto.ImmovableImageRequestDto;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
@@ -9,7 +8,6 @@ import com.example.arendapro.enums.State;
 import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.entity.User;
-import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
