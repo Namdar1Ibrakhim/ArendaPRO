@@ -6,6 +6,7 @@ import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
@@ -16,8 +17,8 @@ import java.util.Optional;
 @Repository
 public interface ImmovablesRepository extends JpaRepository<Immovables, Integer>{
 
-    @Query("SELECT i FROM Immovables i WHERE i.id =:id and i.status = 'ACTIVE'")
-    Optional<Immovables> findByActiveId(Integer id);
+    @Query("SELECT i FROM Immovables i WHERE i.id =:id")
+    Optional<Immovables> findById(Integer id);
 
     @Query("SELECT i FROM Immovables i WHERE i.owner =:owner")
     List<Immovables> findImmovablesByOwner(User owner);

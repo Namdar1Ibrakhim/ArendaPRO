@@ -19,7 +19,7 @@ public interface ImmovablesService {
     String deleteImmovable(Integer immovables_id, User user) throws Exception;
     ImmovableResponseDto editImmovable(Integer immovable_id, ImmovableRequestDto immovableDto, User user) throws AccessDeniedException, IOException;
     List<ImmovableResponseDto> getAllActiveImmovables(int page, int limit);
-    ImmovableResponseDto getActiveImmovableById(Integer immovables_id);
+    ImmovableResponseDto getImmovableById(Integer immovables_id);
     List<ImmovableResponseDto> getAllMyImmovables(User user);
     List<ImmovableResponseDto> getActiveImmovablesByOwner(Integer owner_id);
 
@@ -32,4 +32,5 @@ public interface ImmovablesService {
 
     void uploadImage(Integer id, MultipartFile image);
 
+    List<Immovables> getFromCache();
 }

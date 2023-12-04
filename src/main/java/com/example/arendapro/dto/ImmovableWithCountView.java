@@ -1,4 +1,4 @@
-package com.example.arendapro.model;
+package com.example.arendapro.dto;
 
 import com.example.arendapro.dto.ImmovableResponseDto;
 

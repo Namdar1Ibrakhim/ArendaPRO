@@ -1,5 +1,7 @@
 package com.example.arendapro.service.impl;
 
+import com.example.arendapro.config.redis.ImmovablesCache;
+import com.example.arendapro.dao.ImmovablesCacheDao;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.ImmovableImage;
@@ -11,13 +13,14 @@ import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.exceptions.EntityNotFoundException;
 import com.example.arendapro.mapper.AddressMapper;
+import com.example.arendapro.mapper.ImmovablesCacheMapper;
 import com.example.arendapro.mapper.ImmovablesMapper;
 import com.example.arendapro.rabbitmq.RabbitMQProducer;
 import com.example.arendapro.repository.ImmovableImageRepository;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.enums.Role;
 import com.example.arendapro.entity.User;
-import com.example.arendapro.service.AddressService;
+import com.example.arendapro.service.address.AddressService;
 import com.example.arendapro.service.ImageService;
 import com.example.arendapro.service.ImmovablesService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +48,8 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     private final RabbitMQProducer producer;
     private final ImageService imageService;
     private final ImmovableImageRepository immovableImageRepository;
+    private final ImmovablesCacheDao immovablesDao;
+    private final ImmovablesCacheMapper immovablesCacheMapper;
 
 
     @Override
@@ -119,8 +124,8 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     }
 
     @Override
-    public ImmovableResponseDto getActiveImmovableById(Integer immovables_id) {
-        Immovables immovables = immovablesRepository.findByActiveId(immovables_id)
+    public ImmovableResponseDto getImmovableById(Integer immovables_id){
+        Immovables immovables = immovablesRepository.findById(immovables_id)
                 .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovables_id));
         return immovablesMapper.toDto(immovables, addressMapper);
     }
@@ -150,7 +155,7 @@ public class ImmovablesServiceImpl implements ImmovablesService {
     @Override
     @Transactional
     public void changeStatus(Integer immovable_id, Status status, User user) throws AccessDeniedException {
-        Immovables immovables = immovablesRepository.findByActiveId(immovable_id)
+        Immovables immovables = immovablesRepository.findById(immovable_id)
                 .orElseThrow(() -> new EntityNotFoundException("Immovable not fount with id: " + immovable_id));
 
         if(!immovables.getOwner().equals(user) && status.equals(Status.MODERATION)) throw new AccessDeniedException("Access Denied, you can't edit");
@@ -164,7 +169,14 @@ public class ImmovablesServiceImpl implements ImmovablesService {
 
     @Override
     public List<Immovables> filterImmovables(Long minPrice, Long maxPrice, Integer minNumOfRooms, Integer maxNumOfRooms, Double minArea, Double maxArea, State state, PropertyType propertyType) {
-        return immovablesRepository.findByFilter(minPrice, maxPrice, minNumOfRooms, maxNumOfRooms, minArea, maxArea, state, propertyType);
+        List<Immovables> immovables = immovablesRepository.findByFilter(minPrice, maxPrice, minNumOfRooms, maxNumOfRooms, minArea, maxArea, state, propertyType);
+
+        List<ImmovablesCache> immovablesCache = new ArrayList<>();
+        for (Immovables i: immovables){
+            immovablesCache.add(immovablesCacheMapper.toCacheClass(i));
+        }
+        immovablesDao.saveAll(immovablesCache);
+        return immovables;
     }
 
     @Override
@@ -181,6 +193,11 @@ public class ImmovablesServiceImpl implements ImmovablesService {
                 .immovable(immovables)
                 .image(fileName).build();
         immovableImageRepository.save(immovableImage);
+    }
+
+    @Override
+    public List<Immovables> getFromCache() {
+        return immovablesDao.findAll();
     }
 
 }

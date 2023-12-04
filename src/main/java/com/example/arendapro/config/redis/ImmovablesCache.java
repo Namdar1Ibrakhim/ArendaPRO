@@ -1,11 +1,15 @@
-package com.example.arendapro.entity;
+package com.example.arendapro.config.redis;
 
+import com.example.arendapro.entity.Favorites;
+import com.example.arendapro.entity.User;
 import com.example.arendapro.entity.address.Address;
 import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
 import com.example.arendapro.enums.Status;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
@@ -13,21 +17,16 @@ import java.util.Date;
 import java.util.List;
 
 
-
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-@Builder
-@Table(name = "immovables")
-public class Immovables {
+@AllArgsConstructor
+@NoArgsConstructor
+@RedisHash("ImmovablesCache")
+public class ImmovablesCache implements Serializable {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     private String title;
@@ -42,26 +41,16 @@ public class Immovables {
 
     private Date createdAt;
 
-    @Column(name = "images")
-    @CollectionTable(name = "images")
-    @ElementCollection
     private List<String> images;
 
-    @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
 
-    @Enumerated(EnumType.STRING)
     private State state;
 
-    @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToMany(mappedBy = "immovable")
     private List<Favorites> favorites;
-
 
 }

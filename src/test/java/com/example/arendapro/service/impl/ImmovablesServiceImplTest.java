@@ -12,7 +12,7 @@ import com.example.arendapro.repository.ImmovableImageRepository;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.enums.Role;
 import com.example.arendapro.entity.User;
-import com.example.arendapro.service.AddressService;
+import com.example.arendapro.service.address.AddressService;
 import com.example.arendapro.service.ImageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ class ImmovablesServiceImplTest {
         immovables.setOwner(user);
         immovables.setStatus(Status.MODERATION);
 
-        when(immovablesRepository.findByActiveId(anyInt())).thenReturn(java.util.Optional.of(immovables));
+        when(immovablesRepository.findById(anyInt())).thenReturn(java.util.Optional.of(immovables));
         when(immovablesRepository.save(any())).thenReturn(immovables);
 
         try {
@@ -100,7 +100,7 @@ class ImmovablesServiceImplTest {
             e.printStackTrace();
         }
 
-        verify(immovablesRepository, times(1)).findByActiveId(immovableId);
+        verify(immovablesRepository, times(1)).findById(immovableId);
 
 
     }
@@ -146,10 +146,10 @@ class ImmovablesServiceImplTest {
         Integer immovablesId = 1;
         Immovables immovables = new Immovables();
 
-        when(immovablesRepository.findByActiveId(anyInt())).thenReturn(java.util.Optional.of(immovables));
+        when(immovablesRepository.findById(anyInt())).thenReturn(java.util.Optional.of(immovables));
         when(immovablesMapper.toDto(any(), any())).thenReturn(new ImmovableResponseDto());
 
-        ImmovableResponseDto result = immovablesService.getActiveImmovableById(immovablesId);
+        ImmovableResponseDto result = immovablesService.getImmovableById(immovablesId);
 
         assertNotNull(result);
     }

@@ -7,7 +7,7 @@ import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.enums.PropertyType;
 import com.example.arendapro.enums.State;
 import com.example.arendapro.exceptions.AccessDeniedException;
-import com.example.arendapro.model.ImmovableWithCountView;
+import com.example.arendapro.dto.ImmovableWithCountView;
 import com.example.arendapro.entity.User;
 import com.example.arendapro.service.ImmovablesService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,7 +72,7 @@ public class ImmovablesController {
 
     @RequestMapping("/{immovables_id}")
     public ResponseEntity<ImmovableResponseDto> getImmovableById(@PathVariable Integer immovables_id){
-        return ResponseEntity.ok(immovablesService.getActiveImmovableById(immovables_id));
+        return ResponseEntity.ok(immovablesService.getImmovableById(immovables_id));
     }
 
     @GetMapping("/myImmovables")
@@ -100,5 +100,10 @@ public class ImmovablesController {
         immovablesService.uploadImage(id, image);
         return new ResponseEntity<>(HttpStatus.OK);
      }
+
+    @GetMapping("/recentlyViewed")
+    public List<Immovables> getImmovablesFromCache() {
+        return immovablesService.getFromCache();
+    }
 
 }
