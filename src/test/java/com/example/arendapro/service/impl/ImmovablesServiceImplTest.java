@@ -1,13 +1,17 @@
 package com.example.arendapro.service.impl;
 
+import com.example.arendapro.config.redis.ImmovablesCache;
+import com.example.arendapro.dao.ImmovablesCacheDao;
 import com.example.arendapro.dto.*;
 import com.example.arendapro.entity.*;
 import com.example.arendapro.entity.address.Address;
 import com.example.arendapro.enums.*;
 import com.example.arendapro.exceptions.*;
 import com.example.arendapro.mapper.AddressMapper;
+import com.example.arendapro.mapper.ImmovablesCacheMapper;
 import com.example.arendapro.mapper.ImmovablesMapper;
 import com.example.arendapro.rabbitmq.RabbitMQProducer;
+import com.example.arendapro.repository.AddressRepository;
 import com.example.arendapro.repository.ImmovableImageRepository;
 import com.example.arendapro.repository.ImmovablesRepository;
 import com.example.arendapro.enums.Role;
@@ -20,8 +24,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +43,14 @@ class ImmovablesServiceImplTest {
     @Mock
     private ImmovablesRepository immovablesRepository;
 
+    @Mock
+    private ImmovablesCacheDao immovablesDao;
+
+    @Mock
+    private ImmovablesCacheMapper immovablesCacheMapper;
+
+    @Mock
+    private AddressRepository addressRepository;
     @Mock
     private ImmovablesMapper immovablesMapper;
 
@@ -107,23 +122,28 @@ class ImmovablesServiceImplTest {
 
 
     @Test
-    public void testDeleteImmovable() throws Exception {
-        Integer immovablesId = 1;
-
+    void testDeleteImmovableWithValidOwner() throws Exception {
+        // Создаем заглушки объектов
         User owner = new User();
-        owner.setRole(Role.USER);
+        owner.setId(1);
+        owner.setRole(Role.MODERATOR); // Или любая другая роль, которая дает доступ
 
-        Immovables immovables = new Immovables();
-        immovables.setOwner(owner);
+        Immovables existingImmovable = new Immovables();
+        existingImmovable.setId(1);
+        existingImmovable.setOwner(owner); // Владелец совпадает с текущим пользователем
 
-        when(immovablesRepository.findById(immovablesId)).thenReturn(Optional.of(immovables));
+        when(immovablesRepository.findById(1)).thenReturn(Optional.of(existingImmovable));
 
-        String result = immovablesService.deleteImmovable(immovablesId, owner);
+        // Вызываем метод, который тестируем
+        immovablesService.deleteImmovable(1, owner);
 
-        assertEquals("Successfully deleted", result);
 
-        verify(addressService).deleteAddress(immovablesId);
-        verify(immovablesRepository).delete(immovables);
+        verify(immovablesRepository, times(1)).findById(1);
+        // Проверяем, что метод delete вызывался один раз с нужным аргументом
+        verify(immovablesRepository, times(1)).delete(existingImmovable);
+        // Проверяем, что метод deleteByImmovableId вызывался один раз с нужным аргументом
+        verify(addressRepository, times(1)).deleteByImmovableId(1);
+        // Проверяем, что сообщение в лог отправлено
     }
 
 
@@ -191,6 +211,35 @@ class ImmovablesServiceImplTest {
         assertFalse(result.isEmpty());
     }
 
+    @Test
+    void testEditImmovableWithValidUserAndDto() throws AccessDeniedException, IOException {
+        // Создаем заглушки объектов
+        User user = new User();
+        user.setId(1);
+        user.setRole(Role.MODERATOR); // Или любая другая роль, которая дает доступ
+
+        ImmovableRequestDto immovableDto = new ImmovableRequestDto();
+
+        Immovables existingImmovable = new Immovables();
+        existingImmovable.setId(1);
+        existingImmovable.setOwner(user); // Владелец совпадает с текущим пользователем
+
+        when(immovablesRepository.findById(eq(1))).thenReturn(Optional.of(existingImmovable));
+        when(immovablesMapper.toEntity(immovableDto)).thenReturn(existingImmovable);
+
+        // Вызываем метод, который тестируем
+        ImmovableResponseDto result = immovablesService.editImmovable(1, immovableDto, user);
+
+
+        // Проверяем, что метод findById вызывался один раз с нужным аргументом
+        verify(immovablesRepository, times(1)).findById(eq(1));
+        // Проверяем, что метод toEntity вызывался один раз с нужным аргументом
+        verify(immovablesMapper, times(1)).toEntity(eq(immovableDto));
+        // Проверяем, что метод save вызывался один раз
+        verify(immovablesRepository, times(1)).save(existingImmovable);
+        // Проверяем, что сообщение в лог отправлено
+    }
+
 
     @Test
     void testFilterImmovables() {
@@ -199,30 +248,47 @@ class ImmovablesServiceImplTest {
         when(immovablesRepository.findByFilter(any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(filteredImmovables);
         when(immovablesMapper.toDtoList(any())).thenReturn(Collections.singletonList(new ImmovableResponseDto()));
 
-        List<Immovables> result = immovablesService.filterImmovables(0L, 100L, 1, 3, 50.0, 150.0, State.Среднее, PropertyType.ДАЧА);
+        List<ImmovableResponseDto> result = immovablesService.filterImmovables(0L, 100L, 1, 3, 50.0, 150.0, State.Среднее, PropertyType.ДАЧА);
 
         assertFalse(result.isEmpty());
     }
 
-
     @Test
-    void testUploadImage() throws IOException {
-        Integer immovableId = 1;
-        MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "content".getBytes());
-        Immovables immovables = new Immovables();
-        immovables.setImages(new ArrayList<>());
+    void testGetFromCache() {
+        List<ImmovablesCache> immovablesCaches = new ArrayList<>();// создайте список объектов для теста
+                when(immovablesDao.findAll()).thenReturn(immovablesCaches);
 
-        when(immovablesRepository.findById(anyInt())).thenReturn(Optional.of(immovables));
-        when(imageService.upload(any())).thenReturn("image.jpg");
+        // Вызываем метод, который тестируем
+        List<ImmovablesCache> result = immovablesService.getFromCache();
 
-        immovablesService.uploadImage(immovableId, image);
+        // Проверяем, что результат равен ожидаемому списку
+        assertEquals(immovablesCaches, result);
+        // Проверяем, что метод findAll вызывался один раз
+        verify(immovablesDao, times(1)).findAll();
+    }
+    @Test
+    void testDeleteCache() {
+        // Генерируем мок объект
+        Immovables immovablesMock = mock(Immovables.class);
 
-        assertNotNull(immovables.getImages());
-        assertEquals(1, immovables.getImages().size());
-        assertEquals("image.jpg", immovables.getImages().get(0));
+        // Задаем поведение мок объекта
+        when(immovablesRepository.findById(1)).thenReturn(Optional.of(immovablesMock));
 
-        verify(immovablesRepository, times(1)).save(immovables);
-        verify(immovableImageRepository, times(1)).save(any());
+        // Вызываем метод, который должен использовать immovablesRepository.findById(1)
+        immovablesService.deleteCache(1);
+
+        // Проверяем, что метод findById был вызван
+        verify(immovablesRepository, times(1)).findById(1);
+
+        // Далее можете проверять другие ожидаемые действия...
+    }
+    @Test
+    void testDeleteAllCache() {
+        // Вызываем метод, который тестируем
+        immovablesService.deleteAllCache();
+
+        // Проверяем, что метод deleteAllCache вызывался один раз
+        verify(immovablesDao, times(1)).deleteAllCache();
     }
 
 

@@ -3,6 +3,7 @@ package com.example.arendapro.exceptions.handler;
 import com.example.arendapro.dto.ErrorResponse;
 import com.example.arendapro.enums.ErrorCode;
 import com.example.arendapro.exceptions.*;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,18 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<ErrorResponse> exceptionEntityExistsHandler(EntityExistsException e){
+        log.info(e.getMessage());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(e.getMessage())
+                .errorCode(404)
+                .build();
+        return ResponseEntity
+                .badRequest()
+                .body(errorResponse);
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ImageUploadException.class)

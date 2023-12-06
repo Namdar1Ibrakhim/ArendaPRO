@@ -12,7 +12,7 @@ import java.util.List;
 public interface MessageService {
 
     List<MessageResponseDto> getAllMyMessage(User user);
-    List<Messages> getMessagesByUser(Integer id, User user);
+    List<MessageResponseDto> getMessagesByUser(Integer id, User user);
     void sendMessage(MessageRequestDto messageDto, User user) throws UserNotFoundException;
 
 }

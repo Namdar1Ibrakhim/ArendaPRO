@@ -12,16 +12,17 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "user")
-public class User implements UserDetails, Serializable {
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String firstname;
@@ -37,21 +38,21 @@ public class User implements UserDetails, Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Immovables> immovables;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Token> tokens;
 
     //Favorites
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Favorites> favorites;
 
     //Messages
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<Messages> senderMessages;
 
-    @OneToMany(mappedBy = "receiver")
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private List<Messages> receiverMessages;
 
     @Override

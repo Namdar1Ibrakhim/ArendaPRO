@@ -17,8 +17,12 @@ import java.util.Optional;
 @Repository
 public interface ImmovablesRepository extends JpaRepository<Immovables, Integer>{
 
-    @Query("SELECT i FROM Immovables i WHERE i.id =:id")
-    Optional<Immovables> findById(Integer id);
+    @Query("SELECT i FROM Immovables i " +
+            "LEFT JOIN FETCH i.owner o " +
+            "LEFT JOIN FETCH i.address " +
+            "LEFT JOIN FETCH i.favorites " +
+            "WHERE i.id = :id")
+    Optional<Immovables> findByActiveId(Integer id);
 
     @Query("SELECT i FROM Immovables i WHERE i.owner =:owner")
     List<Immovables> findImmovablesByOwner(User owner);

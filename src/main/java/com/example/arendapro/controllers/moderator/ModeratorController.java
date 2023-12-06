@@ -1,5 +1,6 @@
 package com.example.arendapro.controllers.moderator;
 
+import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.dto.StatusDto;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.rabbitmq.RabbitMQConsumer;
@@ -18,7 +19,7 @@ public class ModeratorController {
     private final ModeratorService service;
 
     @GetMapping("/getWaitingImmovables")
-    public ResponseEntity<Immovables> getWaitingImmovables(){
+    public ResponseEntity<ImmovableResponseDto> getWaitingImmovables(){
         return ResponseEntity.ok(service.getWaitingImmovable());
     }
 

@@ -1,5 +1,6 @@
 package com.example.arendapro.controllers;
 
+import com.example.arendapro.config.redis.ImmovablesCache;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.dto.StatusDto;
@@ -40,8 +41,9 @@ public class ImmovablesController {
     }
 
     @DeleteMapping("/{immovables_id}")
-    public ResponseEntity<String> deleteImmovable(@PathVariable Integer immovables_id, @AuthenticationPrincipal User user) throws Exception {
-        return ResponseEntity.ok(immovablesService.deleteImmovable(immovables_id, user));
+    public ResponseEntity deleteImmovable(@PathVariable Integer immovables_id, @AuthenticationPrincipal User user) throws Exception {
+        immovablesService.deleteImmovable(immovables_id, user);
+        return new ResponseEntity(HttpStatus.OK);
 
     }
     @PostMapping("/edit/{immovable_id}")
@@ -55,8 +57,8 @@ public class ImmovablesController {
         List<ImmovableResponseDto> list = immovablesService.getAllActiveImmovables(page, limit);
         return ResponseEntity.ok(new ImmovableWithCountView(list, list.size()));
     }
-    @GetMapping("/filteredImmovsbles")
-    public List<Immovables> getFilteredImmovables(@RequestParam(required = false) Long minPrice,
+    @GetMapping("/filteredImmovables")
+    public List<ImmovableResponseDto> getFilteredImmovables(@RequestParam(required = false) Long minPrice,
                                                   @RequestParam(required = false) Long maxPrice,
                                                   @RequestParam(required = false) Integer minNumOfRooms,
                                                   @RequestParam(required = false) Integer maxNumOfRooms,
@@ -96,14 +98,27 @@ public class ImmovablesController {
 
     @PostMapping("/{id}/image")
     @Operation(summary = "Upload image to task")
-    public ResponseEntity uploadImage(@PathVariable Integer id, @RequestBody MultipartFile image){
-        immovablesService.uploadImage(id, image);
+    public ResponseEntity uploadImage(@PathVariable Integer id, @RequestBody MultipartFile image, @AuthenticationPrincipal User user) throws AccessDeniedException {
+        immovablesService.uploadImage(id, image, user);
         return new ResponseEntity<>(HttpStatus.OK);
      }
 
     @GetMapping("/recentlyViewed")
-    public List<Immovables> getImmovablesFromCache() {
+    public List<ImmovablesCache> getImmovablesFromCache() {
         return immovablesService.getFromCache();
+    }
+
+    @GetMapping("/deleteCache/{immovable_id}")
+    public ResponseEntity deleteCache(@PathVariable Integer immovable_id){
+        immovablesService.deleteCache(immovable_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/deleteAllCache")
+    public ResponseEntity deleteAllCache(){
+        immovablesService.deleteAllCache();
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 }

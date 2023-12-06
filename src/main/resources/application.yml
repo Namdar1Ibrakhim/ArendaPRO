@@ -17,8 +17,6 @@ spring:
   graphql:
     graphiql:
       enabled: true
-#  session:
-#    store-type: redis
   rabbitmq:
     host: localhost
     port: 5672
@@ -35,6 +33,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+      id:
+        increment: 1
     show-sql: true
     properties:
       hibernate:

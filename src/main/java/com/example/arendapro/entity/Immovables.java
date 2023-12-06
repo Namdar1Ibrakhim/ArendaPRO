@@ -6,7 +6,6 @@ import com.example.arendapro.enums.State;
 import com.example.arendapro.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,19 +13,20 @@ import java.util.List;
 
 
 
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Builder
 @Table(name = "immovables")
 public class Immovables {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
@@ -60,7 +60,7 @@ public class Immovables {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToMany(mappedBy = "immovable")
+    @OneToMany(mappedBy = "immovable", cascade = CascadeType.ALL)
     private List<Favorites> favorites;
 
 

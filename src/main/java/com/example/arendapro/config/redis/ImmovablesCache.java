@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
@@ -23,11 +24,10 @@ import java.util.List;
 @RedisHash("ImmovablesCache")
 public class ImmovablesCache implements Serializable {
 
-    @Id
-    @GeneratedValue
+
     private Integer id;
 
-    private User owner;
+    private String owner;
 
     private String title;
 
@@ -43,14 +43,16 @@ public class ImmovablesCache implements Serializable {
 
     private List<String> images;
 
-    private PropertyType propertyType;
+    private String propertyType;
 
-    private State state;
+    private String state;
 
-    private Status status;
+    private String status;
 
-    private Address address;
+    private String address;
 
-    private List<Favorites> favorites;
+
+
+
 
 }

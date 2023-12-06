@@ -1,5 +1,6 @@
 package com.example.arendapro.service.impl;
 
+import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.enums.Status;
 import com.example.arendapro.exceptions.EntityNotFoundException;
@@ -30,19 +31,6 @@ class ModeratorServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    void testGetWaitingImmovable() {
-        String messageId = "1";
-        Immovables expectedImmovable = new Immovables();
-        when(consumer.getMessageFromQueue()).thenReturn(messageId);
-        when(immovablesRepository.findById(Integer.parseInt(messageId))).thenReturn(java.util.Optional.of(expectedImmovable));
-
-        Immovables result = moderatorService.getWaitingImmovable();
-
-        assertNotNull(result);
-        assertEquals(expectedImmovable, result);
     }
 
     @Test

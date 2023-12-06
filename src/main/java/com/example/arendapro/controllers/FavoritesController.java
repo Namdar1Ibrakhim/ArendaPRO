@@ -2,6 +2,7 @@ package com.example.arendapro.controllers;
 
 import com.example.arendapro.dto.FavoritesDto;
 import com.example.arendapro.entity.User;
+import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.service.FavoritesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,8 @@ public class FavoritesController {
         return ResponseEntity.ok(favoritesService.addFavorites(immovable_id, user));
     }
     @RequestMapping("/delete/{favorites_id}")
-    public ResponseEntity deleteFavorites(@PathVariable Integer favorites_id){
-        favoritesService.deleteFavorites(favorites_id);
+    public ResponseEntity deleteFavorites(@PathVariable Integer favorites_id, @AuthenticationPrincipal User user) throws AccessDeniedException {
+        favoritesService.deleteFavorites(favorites_id, user);
         return new ResponseEntity(HttpStatus.OK);
     }
 

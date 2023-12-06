@@ -9,5 +9,5 @@ import lombok.Setter;
 public class FavoritesDto {
 
     private Integer user_id;
-    private ImmovableRequestDto immovablesDto;
+    private Integer immovableId;
 }

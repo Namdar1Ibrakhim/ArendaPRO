@@ -9,8 +9,6 @@ import com.example.arendapro.service.UserProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,14 +22,12 @@ public class ProfileController{
     private final UserProfileService userProfileService;
 
     @RequestMapping("/{user_id}")
-    @QueryMapping(name = "userById")
     @Operation(summary = "Get UserDto by id")
-    public ResponseEntity<UserDto> getUserProfileById(@PathVariable @Argument Integer user_id) throws UserNotFoundException {
+    public ResponseEntity<UserDto> getUserProfileById(@PathVariable Integer user_id) throws UserNotFoundException {
         UserDto userProfileDto = userProfileService.getUserDetailsById(user_id);
         return ResponseEntity.ok(userProfileDto);
     }
 
-    @QueryMapping(name = "userByEmail")
     @Operation(summary = "Get UserDto by email")
     @RequestMapping("/byEmail/{email}")
     public ResponseEntity<UserDto> getUserProfileByEmail(@PathVariable String email){

@@ -35,7 +35,7 @@ public class MessagesController {
     }
 
     @RequestMapping("/{user_id}")
-    public ResponseEntity<List<Messages>> getMessagesByUser(@PathVariable Integer user_id, @AuthenticationPrincipal User user){
+    public ResponseEntity<List<MessageResponseDto>> getMessagesByUser(@PathVariable Integer user_id, @AuthenticationPrincipal User user){
         return ResponseEntity.ok(messageService.getMessagesByUser(user_id, user));
     }
 

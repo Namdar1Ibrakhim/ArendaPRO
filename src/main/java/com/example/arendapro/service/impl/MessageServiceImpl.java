@@ -33,8 +33,9 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Messages> getMessagesByUser(Integer id, User user) {
-        return messageRepository.findAllByReceiver_IdAndSender_Id(id, user.getId());
+    public List<MessageResponseDto> getMessagesByUser(Integer id, User user) {
+        List<Messages> list = messageRepository.findAllByReceiver_IdAndSender_Id(id, user.getId());
+        return messageMapper.toDtoList(list);
     }
 
     @Override

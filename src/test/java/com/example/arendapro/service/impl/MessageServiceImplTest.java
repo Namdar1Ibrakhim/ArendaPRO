@@ -84,7 +84,7 @@ class MessageServiceImplTest {
         when(messageRepository.findAllByReceiver_IdAndSender_Id(receiver.getId(), sender.getId()))
                 .thenReturn(Collections.emptyList());
 
-        List<Messages> result = messageService.getMessagesByUser(sender.getId(), receiver);
+        List<MessageResponseDto> result = messageService.getMessagesByUser(sender.getId(), receiver);
 
         assertEquals(0, result.size());
     }
@@ -94,13 +94,20 @@ class MessageServiceImplTest {
         User sender = new User();
         User receiver = new User();
         Messages message = new Messages();
+
         when(messageRepository.findAllByReceiver_IdAndSender_Id(receiver.getId(), sender.getId()))
                 .thenReturn(Collections.singletonList(message));
-        when(messageMapper.toDto(message)).thenReturn(new MessageResponseDto()); // Adjust as per your mapping logic
 
-        List<Messages> result = messageService.getMessagesByUser(sender.getId(), receiver);
+        when(messageMapper.toDtoList(Collections.singletonList(message)))
+                .thenReturn(Collections.singletonList(new MessageResponseDto()));
+
+        List<MessageResponseDto> result = messageService.getMessagesByUser(sender.getId(), receiver);
 
         assertEquals(1, result.size());
+
+        verify(messageMapper, times(1)).toDtoList(Collections.singletonList(message));
+        verify(messageMapper, times(0)).toDto(any()); // Убедимся, что метод toDto не вызывался
     }
+
 
 }

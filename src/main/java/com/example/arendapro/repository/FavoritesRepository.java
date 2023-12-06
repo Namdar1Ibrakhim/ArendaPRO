@@ -12,4 +12,5 @@ public interface FavoritesRepository extends JpaRepository<Favorites, Integer> {
 
     List<Favorites> findAllByUser_Id(Integer user_id);
 
+    boolean existsByImmovable_id(Integer immovable_id);
 }

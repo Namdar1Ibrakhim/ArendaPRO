@@ -1,24 +1,22 @@
 package com.example.arendapro.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
 
+@Getter
+@Setter
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Messages implements Serializable {
+public class Messages  {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

@@ -3,6 +3,8 @@ import com.example.arendapro.dto.FavoritesDto;
 import com.example.arendapro.entity.Favorites;
 import com.example.arendapro.entity.Immovables;
 import com.example.arendapro.entity.User;
+import com.example.arendapro.enums.Role;
+import com.example.arendapro.exceptions.AccessDeniedException;
 import com.example.arendapro.exceptions.EntityNotFoundException;
 import com.example.arendapro.mapper.FavoritesMapper;
 import com.example.arendapro.repository.FavoritesRepository;
@@ -17,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class FavoritesServiceImplTest {
@@ -71,14 +72,46 @@ public class FavoritesServiceImplTest {
         verify(favoritesRepository, never()).save(any());
     }
     @Test
-    void testDeleteFavorites() {
-        Integer favoritesId = 1;
+    void testDeleteFavoritesWithValidUser() {
+        // Создаем заглушки объектов
+        User user = new User();
+        user.setId(1);
+        user.setRole(Role.MODERATOR); // Или любая другая роль, которая дает доступ
 
-        favoritesService.deleteFavorites(favoritesId);
+        Favorites favorites = new Favorites();
+        favorites.setId(1);
+        favorites.setUser(user);
 
-        verify(favoritesRepository, times(1)).deleteById(favoritesId);
+        // Настроим заглушку для findById
+        when(favoritesRepository.findById(1)).thenReturn(Optional.of(favorites));
+
+        // Вызываем метод, который тестируем
+        assertDoesNotThrow(() -> favoritesService.deleteFavorites(1, user));
+
+        // Проверяем, что метод findById вызывался один раз с нужным аргументом
+        verify(favoritesRepository, times(1)).findById(1);
+        // Проверяем, что метод deleteById вызывался один раз с нужным аргументом
+        verify(favoritesRepository, times(1)).deleteById(1);
     }
 
+    @Test
+    void testDeleteFavoritesWithNonExistingFavorites() {
+        // Создаем заглушки объектов
+        User user = new User();
+        user.setId(1);
+        user.setRole(Role.MODERATOR); // Или любая другая роль, которая дает доступ
+
+        // Настроим заглушку для findById
+        when(favoritesRepository.findById(1)).thenReturn(Optional.empty());
+
+        // Проверяем, что EntityNotFoundException выбрасывается при отсутствии Favorites
+        assertThrows(EntityNotFoundException.class, () -> favoritesService.deleteFavorites(1, user));
+
+        // Проверяем, что метод findById вызывался один раз с нужным аргументом
+        verify(favoritesRepository, times(1)).findById(1);
+        // Проверяем, что метод deleteById не вызывался
+        verify(favoritesRepository, times(0)).deleteById(anyInt());
+    }
     @Test
     void testGetAllMyFavorites() {
         User user = new User();

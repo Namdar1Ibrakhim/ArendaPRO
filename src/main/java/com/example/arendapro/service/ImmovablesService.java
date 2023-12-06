@@ -1,5 +1,6 @@
 package com.example.arendapro.service;
 
+import com.example.arendapro.config.redis.ImmovablesCache;
 import com.example.arendapro.dto.ImmovableRequestDto;
 import com.example.arendapro.dto.ImmovableResponseDto;
 import com.example.arendapro.entity.Immovables;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public interface ImmovablesService {
     ImmovableResponseDto addImmovable(ImmovableRequestDto immovablesDto, User user) throws IOException;
-    String deleteImmovable(Integer immovables_id, User user) throws Exception;
+    void deleteImmovable(Integer immovables_id, User user) throws Exception;
     ImmovableResponseDto editImmovable(Integer immovable_id, ImmovableRequestDto immovableDto, User user) throws AccessDeniedException, IOException;
     List<ImmovableResponseDto> getAllActiveImmovables(int page, int limit);
     ImmovableResponseDto getImmovableById(Integer immovables_id);
@@ -28,9 +29,12 @@ public interface ImmovablesService {
 
     void changeStatus(Integer immovable_id, Status status, User user) throws AccessDeniedException;
 
-    List<Immovables> filterImmovables(Long minPrice, Long maxPrice, Integer minNumOfRooms, Integer maxNumOfRooms, Double minArea, Double maxArea, State state, PropertyType propertyType);
+    List<ImmovableResponseDto> filterImmovables(Long minPrice, Long maxPrice, Integer minNumOfRooms, Integer maxNumOfRooms, Double minArea, Double maxArea, State state, PropertyType propertyType);
 
-    void uploadImage(Integer id, MultipartFile image);
+    void uploadImage(Integer id, MultipartFile image, User user) throws AccessDeniedException;
 
-    List<Immovables> getFromCache();
+    List<ImmovablesCache> getFromCache();
+    void deleteCache(Integer immovable_id);
+
+    void deleteAllCache();
 }
