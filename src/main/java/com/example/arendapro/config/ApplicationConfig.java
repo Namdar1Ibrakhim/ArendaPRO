@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableCaching
 @Configuration
 @RequiredArgsConstructor
-@EnableFeignClients(basePackages = "com.example.arendapro.openfeign")
 public class ApplicationConfig {
 
 
