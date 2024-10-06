@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 
 @Slf4j
 @RestController
@@ -18,11 +16,8 @@ public class AuthentificationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody @Valid RegisterRequest request
-    ){
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest request){
         return ResponseEntity.ok(service.registerUser(request));
-
     }
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
